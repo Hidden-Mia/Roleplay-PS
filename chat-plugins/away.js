@@ -34,7 +34,7 @@ function parseStatus(text, encoding) {
 exports.commands = {
 	away: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!user.isAway && user.name.length > 15) return this.sendReply("Your username is too long for any kind of use of this command.");
+		if (!user.isAway && user.name.length > 20) return this.sendReply("Your username is too long for any kind of use of this command.");
 
 		target = target ? target.replace(/[^a-zA-Z0-9]/g, '') : 'AWAY';
 		let newName = user.name;
@@ -49,7 +49,7 @@ exports.commands = {
 		}
 
 		newName += ' - ' + status;
-		if (newName.length > 18) return this.sendReply("\"" + target + "\" is too long to use as your away status.");
+		if (newName.length > 32) return this.sendReply("\"" + target + "\" is too long to use as your away status.");
 
 		// forcerename any possible impersonators
 		let targetUser = Users.getExact(user.userid + target);
@@ -87,7 +87,7 @@ exports.commands = {
 	afk: function (target, room, user) {
 		this.parse('/away AFK');
 	},
-
+	
 	busy: function (target, room, user) {
 		this.parse('/away BUSY');
 	},
