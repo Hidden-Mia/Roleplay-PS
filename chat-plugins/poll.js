@@ -307,8 +307,5 @@ exports.commands = {
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: + % @ # & ~"],
-	
-	tourpoll: function(target, room, user) {
-		var tiers = ['Battle Factory', 'Challenge Cup 1V1', 'Doubles OU', 'Gen 1 Random Battle', 'Monotype', 'OU', 'RU', 'UU'];
-		this.parse('/poll new Next Tournament?, ' + tiers);
+
 };
