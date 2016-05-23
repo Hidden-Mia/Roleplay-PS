@@ -102,7 +102,7 @@ exports.commands = {
 	panagram: function (target, room, user, connection, cmd) {
 		if (pGames[room.id]) return this.errorReply("There is currently a game of panagram going on in this room.");
 		if (!this.can('declare', null, room)) return this.errorReply("You must be ranked # or higher to start a game of panagram in this room.");
-		if (room.id !== 'antiquitygames') return this.sendReply('|html|You can only start a game of Panagram in the <button name = "send" value = "/join casino">antiquitygames</button>');
+		if (room.id !== 'panagrams') return this.sendReply('|html|You can only start a game of Panagram in the <button name = "send" value = "/join casino">panagrams</button>');
 		if (!target || isNaN(target)) return this.errorReply("Usage: /panagram [number of sessions]");
 		if (target < 150) return this.errorReply("The minimum number of sessions you can have at a time is 150.");
 		if (~target.indexOf('.')) return this.errorReply("The number of sessions cannot be a decimal value.");
