@@ -4,14 +4,15 @@ let fs = require('fs');
 let path = require('path');
 
 let shop = [
-	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
+	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, symbols that could cause offense or impersonate staff will result in it being denied.)', 5],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
-	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
-	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
-	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
-	['Icon', 'Buy a custom icon that can be applied to the rooms you want. You must take into account that the provided image should be 32 x 32', 75],
-	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100],
+	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 5 members for this room.', 15],
+	['Poof', 'Buys a poof to be added to the poof poll.', 15],
+	['Userlist Icon Upgrade', 'Purchases an userlist icon for another room of your choice. (may take some time to process)', 25],
+	['Custom Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 35],
+	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 40],
+	['Emotes', 'Buys an emote to add to the emote poll, (You supply. Images must be 50x50 and can be refused if deemed wildly inappropiate.', 65],
+	['Userlist Icon', 'Buys a pokemon icon to accompany your name in the userlist for the lobby. (send the name of the pokemon you wish for it be to a member of staff, may take some time to process)', 125],
 ];
 
 let shopDisplay = getShopDisplay(shop);
