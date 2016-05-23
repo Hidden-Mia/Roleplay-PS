@@ -301,10 +301,14 @@ exports.commands = {
 	},
 	pollhelp: ["/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.",
 				"Accepts the following commands:",
-				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~",
+				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: + % @ # & ~",
 				"/poll vote [number] - Votes for option [number].",
-				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~",
+				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: + % @ # & ~",
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
-				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
+				"/poll end - Ends a poll and displays the results. Requires: + % @ # & ~"],
+	
+	tourpoll: function(target, room, user) {
+		var tiers = ['Battle Factory', 'Challenge Cup 1V1', 'Doubles OU', 'Gen 1 Random Battle', 'Monotype', 'OU', 'RU', 'UU'];
+		this.parse('/poll new Next Tournament?, ' + tiers);
 };
