@@ -1,0 +1,212 @@
+#lobby-userlist-user-kokonoesan, #staff-userlist-user-kokonoesan,  #shadowbanroom-userlist-user-kokonoesan {
+    background:url("http://orig00.deviantart.net/71cd/f/2009/350/0/f/sleeping_glaceon_by_lionheartcartoon.gif") no-repeat right
+}
+#lobby-userlist-user-opvictreebel, #staff-userlist-user-opvictreebel,  #shadowbanroom-userlist-user-opvictreebel {
+    background:url("http://pokedream.com/pokedex/images/mini/155.gif") no-repeat right
+}
+body {
+    background: url("https://i.gyazo.com/b62eeb4bdf6c3b5bf73988ab3ccef8bd.png") no-repeat;
+    background-color: #A9ABBD;
+  }
+
+.header .logo {
+    float: left;
+    margin: 8px 0px 0px -148px;
+    padding-right: 200px;
+    padding-bottom: 5px;
+  }
+
+.header{
+    background:#b3ffff url("http://i.imgur.com/7ukbPVy.png") no-repeat;
+}
+
+.nightclub {
+	background:#000000;
+	margin:-3px
+}
+
+.userlist{
+    background:#b3ffff;
+}
+
+.chat-log {
+    background: #e5ffff url("http://vignette2.wikia.nocookie.net/pokemon/images/a/a9/471Glaceon_Dream.png/revision/latest?cb=20140315222609") top right no-repeat;
+    border-bottom: 1px solid #1affff;
+    border-left: 1px solid #1affff;
+}
+
+.pm-window-kokonoesan h3:hover,.pm-window-kokonoesan.focused h3,.pm-window-kokonoesan.focused h3:hover {
+      background:#f472c1 url("http://www.serebii.net/pokedex-dp/icon/419.gif") no-repeat;
+      background-position:225px -8px;
+      color:#f472c1;
+      border-color:#f472c1
+}
+
+.pm-window-kokonoesan h3 small,.pm-window-kokonoesan h3 .minimizebutton,.pm-window-kokonoesan h3 .closebutton,.pm-window-kokonoesan h3:hover .minimizebutton {
+      color:#f472c1
+}
+
+.pm-window-kokonoesan h3 .closebutton:hover+.minimizebutton.minimizebutton {
+      color:#f472c1
+}
+
+.pm-window-kokonoesan h3 .closebutton:hover {
+      color:#f472c1
+}
+
+.pm-window-kokonoesan h3 .minimizebutton:hover {
+      color:#f472c1
+}
+
+.pm-window-kokonoesan .pm-log,.pm-window-kokonoesan.focused .pm-log {
+      background:rgba(236,255,251,0.9) url("http://i.imgur.com/Ix37Qfk.png") no-repeat right top;
+      border-color:#f472c1
+}
+
+.pm-window-kokonoesan .pm-log-add,.pm-window-kokonoesan.focused .pm-log-add {
+      background:#f472c1;
+      border-color:#f472c1
+}
+
+.pm-window-kokonoesan .pm-log-add .textbox{
+      border-color:#f472c1;
+      background:rgba(243,255,253,0.95);
+      color:#000
+}
+
+.pm-log{
+    background:#e5ffff;
+}
+
+.pm-window h3{
+    background: #ccffff url("http://pldh.net/media/pokecons_action/471.gif") bottom right no-repeat;
+    background-position: 200px;
+    color:#006666;
+}
+
+.pm-window h3:hover {
+    color:#ccffff;
+    background: #ffffff ;
+  }
+
+.pm-window.focused h3, .pm-window.focused h3:hover {
+	background: #b3ffff url("http://pldh.net/media/pokecons_action/471.gif") bottom right no-repeat;
+    background-position: 200px;
+	color:#006666;
+}
+
+.pm-log-add{
+    background:#ccffff ;
+}
+
+.tabbar a.button.cur, .tabbar a.button.cur:hover {
+    background: #ccffff;
+      border-color:#ffffff;
+    color: #000;
+  }
+
+.tabbar a.button {
+    background:#ccffff;
+    color:#000;
+    border-color:#ffffff;
+}
+
+.maintabbarbottom {
+    background: #ccffff;
+    border-color:#ccffff;
+  }
+
+.teamlist{
+    background:#99ffff;
+}
+
+.pad{
+    background:#ccffff;
+}
+
+.team{
+    background:#33ffff;
+    color:#80c0ff;
+}
+
+.teamchart{
+    background:#80ffff;
+}
+
+.teamchart, .teamchart li{
+    background:#ccffff;
+}
+
+.battle-log{
+    background:#e5ffff;
+}
+
+.ps-room{
+     background:url("https://i.gyazo.com/b62eeb4bdf6c3b5bf73988ab3ccef8bd.png");
+}
+
+.ps-room.ps-room-opaque{
+    background:url("https://i.gyazo.com/b62eeb4bdf6c3b5bf73988ab3ccef8bd.png");
+}
+
+.ps-room .battle-controls{
+    background:#ccffff;
+}
+
+.battle-log h2{
+    background:white;
+    color:#80c0ff;
+}
+
+.ps-room .battle-log-add{
+    background:#ccffff;
+}
+
+.rightbar, .leftbar{
+    background:#ccffff;
+    color:white;
+}
+
+.ps-popup{
+    background:#e5ffff;
+}
+  
+ .chat-log-add{
+    background:#ccffff;
+  }
+
+.mainmenufooter a {
+    color: #000000;
+    text-shadow: 0px 0px 1px #ccffff, 0px 0px 1px #ccffff, 0px 0px 1px #ccffff;
+}
+
+.mainmenufooter a:hover {
+    color: #009999;
+}
+
+.menugroup .button {
+    background: #ccffff;
+        box-sizing: border-box;
+    font-size: 10pt;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    display: inline-block;
+    padding: 5px 7px 3px;
+    width: 200px;
+    outline: medium none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0px -1px 0px #0F1923;
+    border-radius: 5px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(255, 255, 255, 0.8) inset;
+    color: #474747;
+    border: 3px solid #474747;
+}
+  
+.menugroup button.big {
+    font-size: 12pt;
+  }
+  
+.menugroup .button:hover {
+    background: #99ffff;
+  }
