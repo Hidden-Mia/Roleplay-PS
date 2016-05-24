@@ -825,11 +825,15 @@ class Tournament {
 
 		if (this.room.isOfficial && tourSize >= sizeRequiredToEarn) {
 			let firstMoney = Math.round(tourSize / 4);
+			let firstTicket = Math.round(tourSize / 0.2);
 			let secondMoney = Math.round(firstMoney / 2);
 
 			Db('money').set(wid, Db('money').get(wid, 0) + firstMoney);
 			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has won " + "<font color='" + color + "'>" + firstMoney + "</font>" + currencyName(firstMoney) + " for winning the tournament!</b>");
 
+			Db('ticket').set(wid, Db('ticket').get(wid, 0) + firstTicket);
+			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has also won " + "<font color='" + color + "'>"  + firstTicket + "</font> tickets for winning the tournament!</b>");
+			
 			if (runnerUp) {
 				Db('money').set(rid, Db('money').get(rid, 0) + secondMoney);
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
