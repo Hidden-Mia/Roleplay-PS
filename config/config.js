@@ -207,6 +207,9 @@ exports.appealurl = '';
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
+exports.serverid = 'glacia';
+exports.servertoken = 'lhBfSOH6FWSz';
+
 // permissions and groups:
 //   Each entry in `grouplist' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.
