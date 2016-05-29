@@ -838,6 +838,23 @@ class Tournament {
 				Db('money').set(rid, Db('money').get(rid, 0) + secondMoney);
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
+			// Award Card
+			let colors = {
+			    Mythic: '#D82A2A',
+			    Legendary: '#E8AB03',
+			    Epic: '#73DF14',
+			    Rare: '#2DD1B6',
+			    Uncommon: '#2D3ED1',
+			    Common: '#000',
+			};
+			let card = '';
+			card += tourCard(tourSize, wid);
+			let cardDetail = card.split(',');
+			let cardRarity = cardDetail[0];
+			let cardName = cardDetail[2];
+
+			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has won " + "<font color='" + colors[cardRarity] + "'>" + cardRarity + "</font> " + cardName + " for winning the tournament!</b>");
+			// Award Card
 		}
 		delete exports.tournaments[this.room.id];
 		delete this.room.game;
