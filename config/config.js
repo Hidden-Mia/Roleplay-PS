@@ -327,6 +327,7 @@ exports.grouplist = [
 		ban: true,
 		modchat: true,
 		roomvoice: true,
+		broadcast: true,
 		forcerename: true,
 		ip: true,
 		alts: '@u',
