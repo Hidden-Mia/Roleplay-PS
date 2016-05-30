@@ -326,6 +326,7 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		ban: true,
 		modchat: true,
+		declare: true,
 		roomvoice: true,
 		broadcast: true,
 		forcerename: true,
