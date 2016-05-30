@@ -352,6 +352,7 @@ exports.grouplist = [
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
+		tournaments: true,
 		jeopardy: true,
 		joinbattle: true,
 		minigame: true,
@@ -362,6 +363,8 @@ exports.grouplist = [
 		name: "Voice",
 		inherit: ' ',
 		alts: 's',
+		tournamentsmoderation: true,
+		tournaments: true,
 		broadcast: true,
 	},
 	{
