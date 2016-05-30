@@ -283,6 +283,7 @@ exports.grouplist = [
 		forcewin: true,
 		declare: true,
 		modchatall: true,
+		broadcast: true,
 		rangeban: true,
 		makeroom: true,
 		editroom: true,
