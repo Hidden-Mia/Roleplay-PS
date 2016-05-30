@@ -33,7 +33,7 @@ exports.commands = {
 		if (!target) return this.errorReply("Usage: /requesthelp [message] - Requests help from Senior Staff. Please remember to include as much detail as possible with your request.");
 		if (target.length < 1) return this.errorReply("Usage: /requesthelp [message] - Requests help from Senior Staff. Please remember to include as much detail as possible with your request.");
 
-		var reportId = (Object.size(Reports) + 1);
+		var reportId = (Object.keys(Reports) + 1);
 		while (Reports[reportId]) reportId--;
 		Reports[reportId] = new Object();
 		Reports[reportId].reporter = user.name;
