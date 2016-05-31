@@ -296,7 +296,7 @@ exports.commands = {
 		const cardsMapping = cards.map(function (card) {
 			return '<button name="send" value="/card ' + card.title + '" style="border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;" class="card-button"><img src="' + card.card + '" width="80" title="' + card.name + '"></button>';
 		});
-		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + Glacia.hashColor(userid) + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
+		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + hashColor(userid) + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
 	},
 
 	card: function (target, room, user) {
