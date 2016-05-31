@@ -20,7 +20,7 @@ function saveReports() {
 }
 
 function pmUpperStaff(message) {
-    Gold.pmUpperStaff(message, '~Server');
+    	 pmUpperStaff(message, '~Server');
 }
 
 exports.commands = {
