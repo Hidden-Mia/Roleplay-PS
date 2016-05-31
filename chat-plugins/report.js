@@ -19,10 +19,6 @@ function saveReports() {
 	fs.writeFile('config/reports.json', JSON.stringify(Reports));
 }
 
-function pmUpperStaff(message) {
-    	 Glacia.pmUpperStaff(message, '~Server');
-}
-
 exports.commands = {
     complain: 'requesthelp',
     bitch: 'requesthelp',
