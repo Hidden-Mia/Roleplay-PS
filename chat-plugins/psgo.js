@@ -1,14 +1,15 @@
 'use strict';
 /********************
- * PSGO
- * Card system originally from EOS: Credit to Naten, nineage, fender, and everyone who added cards/
+ * Cards
+ * Origins's Card System: Credit to Naten, nineage, fender, and everyone who added cards/ sparkychild for trading, searching, transfering of cards
  * All cards should be retrieved here http://www.pokemon.com/us/pokemon-tcg/pokemon-cards/
  * Cards are organized alphabetically and use a point system
  * publicids are dex numbers and any unique identifiers (if they're not a Pokemon, do a shorthand version of the card name)
  * Dex Number, (for multiple pokemon: DEX[lowercase letter, a, b, c, d])
 ********************/
 const uuid = require('uuid');
-const cards = require('../config/card-data.js');
+const cards = require('./card-data.js');
+let color = require('../config/color');
 
 const colors = {
 	Mythic: '#D82A2A',
@@ -119,21 +120,6 @@ function getPointTotal(userid) {
 	return total;
 }
 
-function getShopDisplay(shop) {
-	let display = "<table width='100%' border='1' style='border-collapse: collapse; color: #444; box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);' cellpadding='5'>" +
-		"<tr><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Command</th><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Description</th><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Cost</th></tr>";
-	let start = 0;
-	while (start < shop.length) {
-		display += "<tr>" + "<td class='card-td'><button name='send' value='/buypack " + shop[start][0] + "' style='border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;'><b>" + shop[start][0] + "</b></button></td>" +
-			"<td class='card-td'>" + shop[start][1] + "</td>" +
-			"<td class='card-td'>" + shop[start][2] + "</td>" +
-			"</tr>";
-		start++;
-	}
-	display += "</table><center>To buy a pack from the shop, use /buypack <em>pack</em>.</center>";
-	return display;
-}
-
 function rankLadder(title, type, array, prop, group) { //Will clean up someday (tm)
 	let groupHeader = group || 'Username';
 	const ladderTitle = '<center><h4><u>' + title + '</u></h4></center>';
@@ -173,6 +159,21 @@ function rankLadder(title, type, array, prop, group) { //Will clean up someday (
 	return ladderTitle + tableTop + tableRows + tableBottom;
 }
 
+function getShopDisplay(shop) {
+	let display = "<table width='100%' border='1' style='border-collapse: collapse; color: #444; box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);' cellpadding='5'>" +
+		"<tr><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Command</th><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Description</th><th class='card-th' style='background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9); box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset;'>Cost</th></tr>";
+	let start = 0;
+	while (start < shop.length) {
+		display += "<tr>" + "<td class='card-td'><button name='send' value='/buypack " + shop[start][0] + "' style='border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;'><b>" + shop[start][0] + "</b></button></td>" +
+			"<td class='card-td'>" + shop[start][1] + "</td>" +
+			"<td class='card-td'>" + shop[start][2] + "</td>" +
+			"</tr>";
+		start++;
+	}
+	display += "</table><center>To buy a pack from the shop, use /buypack <em>pack</em>.</center>";
+	return display;
+}
+
 function toTitleCase(str) {
 	return str.replace(/(\w\S*)/g, function (txt) {
 		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -200,19 +201,22 @@ exports.commands = {
 		if (!target) return this.sendReply("/buypack - Buys a pack from the pack shop. Alias: /buypacks");
 		let self = this;
 		let packId = toId(target);
-		Economy.readMoney(user.userid, (amount) => {
-			if (cleanShop.indexOf(packId) < 0) return self.sendReply("This is not a valid pack. Use /packshop to see all packs.");
-			let shopIndex = cleanShop.indexOf(toId(target));
-			if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash' && packId !== 'xyancientorigins') return self.sendReply("This pack is not currently in circulation.  Please use /packshop to see the current packs.");
-			let cost = shop[shopIndex][2];
-			if (cost > amount) return self.sendReply("You need " + (cost - amount) + " more bucks to buy this pack.");
-			Economy.writeMoney(user.userid, -1 * cost);
-			let pack = toId(target);
-			self.sendReply('|raw|You have bought ' + target + ' pack for ' + cost + ' bucks. Use <button name="send" value="/openpack ' + pack + '"><b>/openpack ' + pack + '</b></button> to open your pack.');
-			self.sendReply("You have until the server restarts to open your pack.");
-			if (!userPacks[user.userid]) userPacks[user.userid] = [];
-			userPacks[user.userid].push(pack);
-		});
+		let amount = Db('money').get(user.userid, 0);
+		if (cleanShop.indexOf(packId) < 0) return self.sendReply("This is not a valid pack. Use /packshop to see all packs.");
+		let shopIndex = cleanShop.indexOf(toId(target));
+		if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash' && packId !== 'xyancientorigins') return self.sendReply("This pack is not currently in circulation.  Please use /packshop to see the current packs.");
+		let cost = shop[shopIndex][2];
+		if (cost > amount) return self.sendReply("You need " + (cost - amount) + " more bucks to buy this pack.");
+		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
+		let pack = toId(target);
+		self.sendReply('|raw|You have bought ' + target + ' pack for ' + cost +
+			' bucks. Use <button name="send" value="/openpack ' +
+			pack + '"><b>/openpack ' + pack + '</b></button> to open your pack.');
+		self.sendReply("You have until the server restarts to open your pack.");
+		if (!userPacks[user.userid]) userPacks[user.userid] = [];
+		userPacks[user.userid].push(pack);
+		if (room.id !== 'lobby' && room.id !== 'casino') room.addRaw(user.name + ' has bought <b>' + target + ' pack </b> from the shop.');
+		room.update();
 	},
 
 	packshop: function (target, room, user) {
@@ -239,8 +243,8 @@ exports.commands = {
 			addCard(user.userid, card);
 			let cardName = cards[card].name;
 			let packName = packShop[cleanShop.indexOf(toId(target))];
-			this.sendReplyBox(user.name + ' got <font color="' + colors[cards[card].rarity] + '">' + cards[card].rarity + '</font> ' +
-			'<button name="send" value="/card ' + card + '"><b>' + cardName + '</b></button> from a ' +
+			this.sendReplyBox(user.name + ' got <font color="' + colors[cards[card].rarity] + '">' + cards[card].rarity + '</font>' +
+			'<button name="send" value="/card ' + card + '"><b>' + cardName + '</b></button> from a' +
 			'<button name="send" value="/buypack ' + packName + '">' + packName + ' Pack</button>.');
 		}
 		let usrIndex = userPacks[user.userid].indexOf(newPack);
@@ -296,7 +300,7 @@ exports.commands = {
 		const cardsMapping = cards.map(function (card) {
 			return '<button name="send" value="/card ' + card.title + '" style="border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;" class="card-button"><img src="' + card.card + '" width="80" title="' + card.name + '"></button>';
 		});
-		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + Wisp.hashColor(userid) + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
+		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + color(userid) + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
 	},
 
 	card: function (target, room, user) {
@@ -306,7 +310,7 @@ exports.commands = {
 		if (!cards.hasOwnProperty(cardName)) return this.sendReply(target + ": card not found.");
 		let card = cards[cardName];
 		let html = '<div class="card-div card-td" style="box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);"><img src="' + card.card + '" height="220" title="' + card.name + '" align="right">' +
-			'<h1>' + card.name + '</h1>' +
+			'<span class="card-name" style="border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9);  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset, 0px 0px 2px rgba(0, 0, 0, 0.2);">' + card.title + '</span>' +
 			'<br /><br /><h1><font color="' + colors[card.rarity] + '">' + card.rarity + '</font></h1>' +
 			'<br /><br /><font color="#AAA"><i>Points:</i></font> ' + card.points +
 			'<br /><br /><font color="#AAA"><i>Found in Packs:</i></font>' + card.collection.join(', ') +
@@ -563,8 +567,8 @@ exports.commands = {
 
 		// send messages
 		this.sendReply("Your trade has been taken submitted.");
-		if (Users.get(targetUser)) Users.get(targetUser).send("|pm|~Card Shop [Do not Reply]|" + targetUser + "|/html <div class=\"broadcast-green\">" + Tools.escapeHTML(user.name) + " has initiated a trade with you.  Click <button name=\"send\" value=\"/trades last\">here</button> or use <b>/trades</b> to view your pending trade requests.</div>");
-		user.send("|pm|~Card Shop [Do not Reply]|" + user.userid + "|/html <div class=\"broadcast-green\">Your trade with " + Tools.escapeHTML(targetUser) + " has been initiated.  Click <button name=\"send\" value=\"/trades last\">here</button> or use <b>/trades</b> to view your pending trade requests.</div>");
+		if (Users.get(targetUser)) Users.get(targetUser).send("|pm|~ChuChuCardTradeClient|" + targetUser + "|/html <div class=\"broadcast-green\">" + Tools.escapeHTML(user.name) + " has initiated a trade with you.  Click <button name=\"send\" value=\"/trades last\">here</button> or use <b>/trades</b> to view your pending trade requests.</div>");
+		user.send("|pm|~ChuChuCardTradeClient|" + user.userid + "|/html <div class=\"broadcast-green\">Your trade with " + Tools.escapeHTML(targetUser) + " has been initiated.  Click <button name=\"send\" value=\"/trades last\">here</button> or use <b>/trades</b> to view your pending trade requests.</div>");
 	},
 
 	trades: 'viewcardtrades',
@@ -877,9 +881,10 @@ exports.commands = {
 	},
 
 	psgo: 'cardshelp',
+	chuchucg: 'cardshelp',
 	cardshelp: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		return this.sendReplyBox("<center><b><u>PSGO Help:</u></b></center><br>" +
+		return this.sendReplyBox("<center><b><u>Chu Chu Trading Card Game:</u></b></center><br>" +
 			"<b>/buypack</b> - Buys a pack from the pack shop.<br>" +
 			"<b>/packshop</b> - Shows the shop for buying packs.<br>" +
 			"<b>/openpack</b> - Opens a pack that has been purchased from the shop.<br>" +
