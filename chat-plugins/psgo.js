@@ -200,13 +200,13 @@ exports.commands = {
 		if (!target) return this.sendReply("/buypack - Buys a pack from the pack shop. Alias: /buypacks");
 		let self = this;
 		let packId = toId(target);
-		let amount = Db('money').get(user.userid, 0);
-		if (cleanShop.indexOf(packId) < 0) return self.sendReply('This is not a valid pack. Use /packshop to see all packs.');
-		let shopIndex = cleanShop.indexOf(toId(target));
-		if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash') return self.sendReply('This pack is not currently in circulation.  Please use /packshop to see the current packs.');
-		let cost = shop[shopIndex][2];
-		if (cost > amount) return self.sendReply('You need ' + (cost - amount) + ' more bucks to buy this card.');
-		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
+		Economy.readMoney(user.userid, (amount) => {
+			if (cleanShop.indexOf(packId) < 0) return self.sendReply("This is not a valid pack. Use /packshop to see all packs.");
+			let shopIndex = cleanShop.indexOf(toId(target));
+			if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash' && packId !== 'xyancientorigins') return self.sendReply("This pack is not currently in circulation.  Please use /packshop to see the current packs.");
+			let cost = shop[shopIndex][2];
+			if (cost > amount) return self.sendReply("You need " + (cost - amount) + " more bucks to buy this pack.");
+			Economy.writeMoney(user.userid, -1 * cost);
 			let pack = toId(target);
 			self.sendReply('|raw|You have bought ' + target + ' pack for ' + cost + ' bucks. Use <button name="send" value="/openpack ' + pack + '"><b>/openpack ' + pack + '</b></button> to open your pack.');
 			self.sendReply("You have until the server restarts to open your pack.");
@@ -296,7 +296,7 @@ exports.commands = {
 		const cardsMapping = cards.map(function (card) {
 			return '<button name="send" value="/card ' + card.title + '" style="border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;" class="card-button"><img src="' + card.card + '" width="80" title="' + card.name + '"></button>';
 		});
-		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
+		this.sendReplyBox('<div style="max-height: 300px; overflow-y: scroll;">' + cardsMapping.join('') + '</div><br><center><b><font color="' + Wisp.hashColor(userid) + '">' + userid + '</font> has ' + cards.length + ' cards and ' + getPointTotal(userid) + ' points.</b></center>');
 	},
 
 	card: function (target, room, user) {
