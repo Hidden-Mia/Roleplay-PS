@@ -200,13 +200,13 @@ exports.commands = {
 		if (!target) return this.sendReply("/buypack - Buys a pack from the pack shop. Alias: /buypacks");
 		let self = this;
 		let packId = toId(target);
-		Economy.readMoney(user.userid, (amount) => {
-			if (cleanShop.indexOf(packId) < 0) return self.sendReply("This is not a valid pack. Use /packshop to see all packs.");
-			let shopIndex = cleanShop.indexOf(toId(target));
-			if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash' && packId !== 'xyancientorigins') return self.sendReply("This pack is not currently in circulation.  Please use /packshop to see the current packs.");
-			let cost = shop[shopIndex][2];
-			if (cost > amount) return self.sendReply("You need " + (cost - amount) + " more bucks to buy this pack.");
-			Economy.writeMoney(user.userid, -1 * cost);
+		let amount = Db('money').get(user.userid, 0);
+		if (cleanShop.indexOf(packId) < 0) return self.sendReply('This is not a valid pack. Use /packshop to see all packs.');
+		let shopIndex = cleanShop.indexOf(toId(target));
+		if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash') return self.sendReply('This pack is not currently in circulation.  Please use /packshop to see the current packs.');
+		let cost = shop[shopIndex][2];
+		if (cost > amount) return self.sendReply('You need ' + (cost - amount) + ' more bucks to buy this card.');
+		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
 			let pack = toId(target);
 			self.sendReply('|raw|You have bought ' + target + ' pack for ' + cost + ' bucks. Use <button name="send" value="/openpack ' + pack + '"><b>/openpack ' + pack + '</b></button> to open your pack.');
 			self.sendReply("You have until the server restarts to open your pack.");
