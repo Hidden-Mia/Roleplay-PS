@@ -839,23 +839,10 @@ class Tournament {
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
 				
-			// Award Card
- 			let colors = {
- 			    Mythic: '#D82A2A',
- 			    Legendary: '#E8AB03',
- 			    Epic: '#73DF14',
- 			    Rare: '#2DD1B6',
- 			    Uncommon: '#2D3ED1',
- 			    Common: '#000',
- 			};
- 			let card = '';
- 			card += tourCard(tourSize, wid);
- 			let cardDetail = card.split(',');
- 			let cardRarity = cardDetail[0];
- 			let cardName = cardDetail[2];
- 
- 			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has won " + "<font color='" + colors[cardRarity] + "'>" + cardRarity + "</font> " + cardName + " for winning the tournament!</b>");
- 			// Award Card
+		if (this.room.isOfficial && tourSize >= 4) {
+			try {
+				let tourRarity = tourCard(tourSize, toId(winner));
+				this.room.addRaw("<b><font color='#088cc7'>" + Tools.escapeHTML(winner) + "</font> has also won a <font color=" + tourRarity[0] + ">" + tourRarity[1] + "</font> card: <button class='tourcard-btn' style='border-radius: 20px; box-shadow: 1px 1px rgba(255, 255, 255, 0.3) inset, -1px -1px rgba(0, 0, 0, 0.2) inset, 2px 2px 2px rgba(0, 0, 0, 0.5);' name='send' value='/card " + tourRarity[2] + "'>" + tourRarity[3] + "</button> from the tournament.");
  
  		}
  		
