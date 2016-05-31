@@ -20,7 +20,7 @@ function saveReports() {
 }
 
 function pmUpperStaff(message) {
-    	 pmUpperStaff(message, '~Server');
+    	 Glacia.pmUpperStaff(message, '~Server');
 }
 
 exports.commands = {
