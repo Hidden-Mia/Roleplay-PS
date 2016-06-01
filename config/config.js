@@ -292,6 +292,9 @@ exports.grouplist = [
 		globalonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
+		customavatar: true,
+		globaldeclare: true,
+		pmall: true,
 	},
 	{
 		symbol: '#',
