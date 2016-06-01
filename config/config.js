@@ -294,7 +294,7 @@ exports.grouplist = [
 		gamemanagement: true,
 		customavatar: true,
 		globaldeclare: true,
-		pmall: true,
+		
 	},
 	{
 		symbol: '#',
