@@ -19,6 +19,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 	demFeels.extendEmotes({
 	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
 	'bomaye': 'http://i.imgur.com/cuDGGJW.gif',
+	'dedchat': 'http://i.imgur.com/W39kJHu.jpg',
 	'disarmher': 'http://i.imgur.com/y0gYGSx.gif',
 	'feelsbd': 'http://i.imgur.com/YyEdmwX.png',
 	'feelsbm': 'http://i.imgur.com/xwfJb2z.png',
@@ -39,7 +40,6 @@ if (typeof demFeels.extendEmotes === 'function') {
 	'feelspn': 'http://i.imgur.com/wSSM6Zk.png',
 	'feelspr': 'http://i.imgur.com/3VtkKfJ.png',
 	'feelsrg': 'http://i.imgur.com/DsRQCsI.png',
-	'feelsrose': 'http://i.imgur.com/MIzzQUd.png',
 	'feelsrs': 'http://i.imgur.com/qGEot0R.png',
 	'feelssc': 'http://i.imgur.com/cm6oTZ1.png',
 	'feelstea': 'http://i.imgur.com/XQc8yZ2.gif',
