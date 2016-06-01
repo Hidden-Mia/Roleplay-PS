@@ -371,6 +371,8 @@ exports.grouplist = [
 		tournamentsmoderation: true,
 		tournaments: true,
 		broadcast: true,
+		warn: true,
+		mute: true,
 	},
 	{
 		symbol: ' ',
