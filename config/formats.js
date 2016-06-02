@@ -2056,14 +2056,6 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Challenge Cup Metronome",
-		section: "Other Metagames",
-
-		searchShow: true,
-		team: 'randomMetro',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
-	},
-	{
 		name: "Challenge Cup 2-vs-2",
 		section: "Other Metagames",
 
