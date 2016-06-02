@@ -2057,7 +2057,7 @@ exports.Formats = [
 	},
 	{
 		name: "Challenge Cup Metronome",
-		section: "Random Metagames",
+		section: "Other Metagames",
 
 		searchShow: true,
 		team: 'randomMetro',
