@@ -2058,7 +2058,6 @@ exports.Formats = [
 	{
 		name: "Challenge Cup 2-vs-2",
 		section: "Other Metagames",
-		mod: 'randoms',
 
 		gameType: 'doubles',
 		team: 'randomCC',
