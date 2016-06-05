@@ -23,7 +23,7 @@ const colors = {
 const shop = [
 	['XY-Base', 'Get three cards from the first pack released in the Pokemon XY set.', 10],
 	['XY-Flashfire', 'Get three cards from the Flashfire pack released in the Pokemon XY set.', 10],
-	['XY-Furious Fists', 'Get three cards from the Furious Fists pack released in the Pokemon XY set.', 5],
+	['XY-Furious Fists', 'Get three cards from the Furious Fists pack released in the Pokemon XY set.', 10],
 	['XY-Phantom Forces', 'Get three cards from the Phantom Forces pack released in the Pokemon XY set.', 10],
 	['XY-Primal Clash', 'Get three cards from the Primal Clash pack released in the Pokemon XY set.', 10],
 	['XY-Roaring Skies', 'Get three cards from the Roaring Skies pack released in the Pokemon XY set.', 10],
