@@ -2013,7 +2013,7 @@ exports.Formats = [
 		banlist: ['Ignore STAB Moves', 'Diggersby', 'Kyurem-Black', 'Porygon-Z', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
 	},
 	{
-		name: "Random Haxmons",
+		name: "HAXmons",
 		section: "Other Metagames",
 
 		searchShow: false,
@@ -2056,7 +2056,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Challenge Cup 2-vs-2",
+		name: "Challenge Cup 2vs2",
 		section: "Other Metagames",
 
 		gameType: 'doubles',
