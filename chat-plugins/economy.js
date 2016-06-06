@@ -182,7 +182,7 @@ exports.commands = {
 		let total = Db('money').set(toId(username), Db('money').get(toId(username), 0) - amount).get(toId(username));
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
-		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
+		this.sendReply(username + " lost " + amount + ". " + username + " now has " + total + ".");
 		if (Users.get(username)) Users(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
 		logMoney(username + " had " + amount + " taken away by " + user.name + ". " + username + " now has " + total);
 	},
