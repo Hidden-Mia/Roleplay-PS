@@ -131,6 +131,7 @@ var cmds = {
  
     'new': 'start',
     start: function (target, room, user) {
+        if (room.id !== 'casino') return this.errorReply('Casino games can only be played in the "Casino".');
         if (!this.can('broadcast', null, room)) return false;
         if (roulettes[room.id]) return this.sendReply('There is already a game of roulette going on.');
         roulettes[room.id] = new Roulette(room);
