@@ -5,14 +5,18 @@ let path = require('path');
 
 let shop = [
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, symbols that could cause offense or impersonate staff will result in it being denied.)', 5],
+        ['POTD', 'Buys ability to set pokemon of the day. ( Pm an admin to set your favorite pokemon of the day )', 10],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
+        ['Poof', 'Buys a poof to be added to the poof poll.', 15],
 	['Region Room', 'Purchases a room at a reduced rate for use with a region.  A roster must be supplied with at least 5 members for this room.', 15],
 	['Userlist Icon Upgrade', 'Purchases an userlist icon for another room of your choice. (may take some time to process)', 25],
-	['Draft League Room', 'Purchases a room at a reduced rate for use for a draft league.  A roster must be supplied with at least 5 members for this room.', 25],
+        ['Symbol Color', 'Get ur auth symbol colored (give rooms u have auth only)', 30],
 	['Custom Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 35],
 	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 40],
 	['Emotes', 'Buys an emote to add to the emote poll, (You supply. Images must be 50x50 and can be refused if deemed wildly inappropiate.', 65],
+        ['Custom Color', 'Buys a color that will e applied to you userlist and chat username ( Pm an admin to get your custom color )', 100],
 	['Userlist Icon', 'Buys a pokemon icon to accompany your name in the userlist for the lobby. (send the name of the pokemon you wish for it be to a member of staff, may take some time to process)', 125],
+        ['Message Colors', 'Buys ability to post colored messages in the chatrooms. ( Pm prince sky to get your message colors )', 175],
 ];
 
 let shopDisplay = getShopDisplay(shop);
