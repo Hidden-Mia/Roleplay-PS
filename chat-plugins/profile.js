@@ -160,6 +160,11 @@ Profile.prototype.vip = function () {
 	if (this.user && this.user.userid in Users.vips) return ' (<font color=#6390F0><b>VIP User</b></font>)';
 	return '';
 };
+Profile.prototype.rs = function () {
+	if (typeof this.user === 'string' && toId(this.user) in Users.rstaff) return ' (<font color=#6390F0><b>Retired Staff</b></font>)';
+	if (this.user && this.user.userid in Users.rstaff) return ' (<font color=#6390F0><b>Retired Staff</b></font>)';
+	return '';
+};
 
 Profile.prototype.dev = function () {
 	if (typeof this.user === 'string' && developers.indexOf(toId(this.user)) > -1) return ' (<font color=#980000><b>Origin Dev</b></font>)';
