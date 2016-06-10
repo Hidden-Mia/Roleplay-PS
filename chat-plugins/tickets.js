@@ -31,7 +31,7 @@ let rewardcentreDisplay = getRewardCentreDisplay(rewardcentre);
  * @param {Number} amount
  * @returns {String}
  */
-function currencyName(amount) {
+function ticketName(amount) {
 	let name = " ticket";
 	return amount === 1 ? name : name + "s";
 }
