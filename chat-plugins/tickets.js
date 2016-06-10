@@ -3,7 +3,7 @@
 let fs = require('fs');
 let path = require('path');
 
-let ticketshop = [
+let rewardcentre = [
         ['Tiny Bucks Pack', 'Buys 5 bucks. (PM an Admin or leader immediately after purchase.)', 500],
         ['Small Bucks Pack', 'Buys 10 bucks. (PM an Admin or leader immediately after purchase.)', 1000],
         ['Normal Bucks Pack', 'Buys 15 bucks. (PM an Admin or leader immediately after purchase.)', 1500],
@@ -13,12 +13,12 @@ let ticketshop = [
 	['3x PSGO', 'Buys 3 PSGO packs. (PM an Admin immediately after purchase.)', 2500],
     ['5x PSGO', 'Buys 5 PSGO packs. ( Pm an Admin immediately after purchase.)', 4000],
 	['PSGO Booster Box', 'Buys 20 PSGO packs. (PM an Admin immediately after purchase.)', 14000],
-	['Nickname', 'Buys a nickname that will be applied in your profile ( Exclusive ticket shop item )', 15000],
+	['Nickname', 'Buys a nickname that will be applied in your profile ( Special Item )', 15000],
 	
 
 ];
 
-let ticketshopDisplay = getRewardCentreDisplay(ticketshop);
+let rewardcentreDisplay = getRewardCentreDisplay(rewardcentre);
 
 /**
  * Gets an amount and returns the amount with the name of the currency.
