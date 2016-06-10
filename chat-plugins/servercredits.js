@@ -1,26 +1,26 @@
 'Use Strict';
 
-/* Original code by panpawn! Modified for roleplau by Prince Sky!*/
+/* Original code by panpawn! Modified for roleplay by Prince Sky!*/
 
-let color = require('../config/color');
+var color = require('../config/color');
+hashColor = function(name, bold) {
+	return (bold ? "<b>" : "") + "<font color=" + color(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Tools.escapeHTML(Users.getExact(name).name) : Tools.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
+}
 
 exports.commands = {
 	credit: 'credits',
 	credits: function (target, room, user) {
-		this.sendReplyBoz("|html|" + "<font size=5>Roleplay Credits</font><br />" +
+		this.popupReply("|html|" + "<font size=5>Roleplay Credits</font><br />" +
 					"<u>Owners:</u><br />" +
-					"- " + Gold.nameColor('Mia Flores', true) + " (Founder, Sysadmin)<br />" +
-                                        "- " + Gold.nameColor('Prince Sky', true) + " (Sysadmin, Host, Developer, Lead Policy)<br />" +
+					"- " + hashColor('Mia Flores', true) + " (Founder, Sysadmin)<br />" +
+                    "- " + hashColor('Prince Sky', true) + " (Sysadmin, Host, Developer, Lead Policy)<br />" +
 					"<br />" +
 					"<u>Development:</u><br />" +
-					"- " + Gold.nameColor('Mia Flores', true) + " (Owner of GitHub repository)<br />" +
-					"- " + Gold.nameColor('Prince Sky', true) + " (Owner of Github repository, Server CSS)<br />" +
+					"- " + hashColor('Mia Flores', true) + " (Owner of GitHub repository)<br />" +
+					"- " + hashColor('Prince Sky', true) + " (Owner of Github repository, Server CSS)<br />" +
 					"<br />" +
 					"<u>Special Thanks:</u><br />" +
 					"- Current staff team<br />" +
 					"- Our regular users<br />");
 	},
 };
-Gold.nameColor = function(name, bold) {
-	return (bold ? "<b>" : "") + "<font color=" + color(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Tools.escapeHTML(Users.getExact(name).name) : Tools.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
-}
