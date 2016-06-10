@@ -1,6 +1,6 @@
 'Use Strict';
 
-/* Original code by panpawn! Modified for roleplay by Prince Sky!*/
+/* Original code by panpawn! Modified for roleplau by Prince Sky!*/
 
 var color = require('../config/color');
 hashColor = function(name, bold) {
