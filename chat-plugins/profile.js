@@ -90,10 +90,6 @@ function currencyName(amount) {
 	return amount === 1 ? name : name + "s";
 }
 
-function ticketName(amount) {
-	let name = " ticket";
-	return amount === 1 ? name : name + "s";
-}
 
 Profile.prototype.avatar = function () {
 	if (this.isOnline) {
@@ -129,9 +125,6 @@ Profile.prototype.money = function (amount) {
 	return label('Money') + amount + currencyName(amount);
 };
 
-Profile.prototype.ticket = function (amount) {
-	return label('Ticket') + amount + ticketName(amount);
-};
 
 Profile.prototype.name = function () {
 	return label('Name') + bold(font(color(toId(this.username)), this.username));
@@ -168,7 +161,6 @@ Profile.prototype.show = function (callback) {
 		SPACE + this.name() + SPACE + this.title() + BR +
 		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
-                SPACE + this.money(Db('ticket').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
 };
