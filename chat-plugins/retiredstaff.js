@@ -18,7 +18,7 @@ exports.commands = {
 			Db('rstafflist').set(rstaffUser, 1);
 			this.sendReply(rstaffUser + ' has been added in the retired staff list.');
 		},
-		takevip: function (target, room, user) {
+		removerstaff: function (target, room, user) {
 			if (!this.can('declare')) return false;
 			let rstaffUser = toId(target);
 			if (!rstaffUser) return this.parse('/help rstaff');
