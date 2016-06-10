@@ -11,14 +11,14 @@ let ticketshop = [
         ['Mega Bucks Pack', 'Buys 50 bucks. ( Pm an Admin or leader immediately after purchase )', 5000],
         ['1x PSGO', 'Buys 1 PSGO pack. (PM an Admin immediately after purchase.)', 1000],
 	['3x PSGO', 'Buys 3 PSGO packs. (PM an Admin immediately after purchase.)', 2500],
-        ['5x PSGO', Buys 5 PSGO packs. ( Pm an Admin immediately after purchase.), 4000],
+    ['5x PSGO', 'Buys 5 PSGO packs. ( Pm an Admin immediately after purchase.)', 4000],
 	['PSGO Booster Box', 'Buys 20 PSGO packs. (PM an Admin immediately after purchase.)', 14000],
 	['Nickname', 'Buys a nickname that will be applied in your profile ( Exclusive ticket shop item )', 15000],
 	
 
 ];
 
-let rewardcentreDisplay = getRewardCentreDisplay(rewardcentre);
+let ticketshopDisplay = getRewardCentreDisplay(ticketshop);
 
 /**
  * Gets an amount and returns the amount with the name of the currency.
