@@ -3,16 +3,17 @@
 let fs = require('fs');
 let path = require('path');
 
-let rewardcentre = [
-        ['Monobuck!', 'Buys 1 buck. (PM an Admin or leader immediately after purchase.)', 75],
-        ['Pentabucks!', 'Buys 5 bucks. (PM an Admin or leader immediately after purchase.)', 300],
-        ['Decabucks!', 'Buys 10 buck. (PM an Admin or leader immediately after purchase.)', 500],
+let ticketshop = [
+        ['Tiny Bucks Pack', 'Buys 5 bucks. (PM an Admin or leader immediately after purchase.)', 500],
+        ['Small Bucks Pack', 'Buys 10 bucks. (PM an Admin or leader immediately after purchase.)', 1000],
+        ['Normal Bucks Pack', 'Buys 15 bucks. (PM an Admin or leader immediately after purchase.)', 1500],
+        ['Big Bucks Pack', 'Buys 30 bucks. ( Pm an Admin or Leader immediately after purchase. )', 300],
+        ['Mega Bucks Pack', 'Buys 50 bucks. ( Pm an Admin or leader immediately after purchase )', 5000],
         ['1x PSGO', 'Buys 1 PSGO pack. (PM an Admin immediately after purchase.)', 1000],
-	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images must be 80x80 otherwise they may not show correctly.)', 2000],
 	['3x PSGO', 'Buys 3 PSGO packs. (PM an Admin immediately after purchase.)', 2500],
-	['Casino Icon', 'Buy a custom icon that can be applied to the Casino room. You must take into account that the provided image should be 32 x 32', 5000],
-	['PSGO Booster Box', 'Buys 24 PSGO packs. (PM an Admin immediately after purchase.)', 15000],
-	['Bot Badge', 'Buys a badge to show you are botting.', 15000],
+        ['5x PSGO', Buys 5 PSGO packs. ( Pm an Admin immediately after purchase.), 4000],
+	['PSGO Booster Box', 'Buys 20 PSGO packs. (PM an Admin immediately after purchase.)', 14000],
+	['Nickname', 'Buys a nickname that will be applied in your profile ( Exclusive ticket shop item )', 15000],
 	
 
 ];
