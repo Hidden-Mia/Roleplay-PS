@@ -140,12 +140,17 @@ Profile.prototype.vip = function (user) {
 	
 };
 
+Profile.prototype.rstaff = function (user) {
+	if (isRSTAFF(user)) return font('#6390F0', '(<b>Retired Staff</b>)');
+	return '';
+	
+};
 Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
 
 	return this.buttonAvatar() +
 		SPACE + this.name() + BR +
-		SPACE + this.group() + SPACE + this.vip(userid) + BR +
+		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
