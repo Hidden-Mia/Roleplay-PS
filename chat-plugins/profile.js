@@ -137,6 +137,10 @@ Profile.prototype.seen = function (timeAgo) {
 Profile.prototype.vip = function (user) {
 	if (isVip(user)) return font('#6390F0', '(<b>VIP User</b>)');
 	return '';
+
+Profile.prototype.rs = function (user) {
+	if (isrs(user)) return font('#6390F0', '(<b>Retired Staff</b>)');
+	return '';
 	
 };
 
@@ -145,7 +149,7 @@ Profile.prototype.show = function (callback) {
 
 	return this.buttonAvatar() +
 		SPACE + this.name() + BR +
-		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.con(userid) + BR +
+		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rs(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
