@@ -1,223 +1,264 @@
-/*
-Emoticon plugin
-This plugin allows you to use emoticons in both chat rooms (as long as they are enabled in the room) and private messages.
+'use strict';
 
-Adding this plugin to your server is fairly simple.
-1) Add this file to your chat-plugins folder.
-2) Open the rooms.js file in your favourite text editor and replace this.add('|c|' + user.getIdentity(this.id) + '|' + message); with:
-    var emoticons = parseEmoticons(user.getIdentity(this.roomid), message);
-    if (emoticons && !room.disableEmoticons) {
-        this.addRaw(emoticons);
-    } else {
-        this.add('|c|' + user.getIdentity(this.id) + '|' + message);
-    }
+let color = require('../config/color');
 
-3) Open the commands.js file and find "var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;"
-    Once you find that line place the following above it:
-    var emoticons = parseEmoticons(user.getIdentity(room.id), target);
-    if (emoticons) {
-        target = "/html " + emoticons;
-    }
-*/
+exports.parseEmoticons = parseEmoticons;
 
-var fs = require('fs');
-var emoticons = {'feelsbd': 'http://i.imgur.com/TZvJ1lI.png'};
-var emoteRegex = new RegExp('feelsbd', 'g');
-
-function loadEmoticons () {
-    try {
-        emoticons = JSON.parse(fs.readFileSync('config/emoticons.json', 'utf8'));
-        emoteRegex = [];
-        for (var emote in emoticons) {
-            emoteRegex.push(escapeRegExp(emote));
-        }
-        emoteRegex = new RegExp('(' + emoteRegex.join('|') + ')', 'g');
-    } catch (e) {}
-}
-loadEmoticons();
-
-function saveEmoticons () {
-    fs.writeFileSync('config/emoticons.json', JSON.stringify(emoticons));
-    emoteRegex = [];
-    for (var emote in emoticons) {
-        emoteRegex.push(emote);
-    }
-    emoteRegex = new RegExp('(' + emoteRegex.join('|') + ')', 'g');
-}
-
-function parseEmoticons (user, message) {
-    var html = user.charAt(0) + '<button class="astext" name="parseCommand" value="/user ' + toId(user) + '">' + '<b><font color="' + hashColor(toId(user)) + '">' + Tools.escapeHTML(user.substr(1)) + ':</font></b></button> ';
-	if (emoteRegex.test(message)) {
-			message = Tools.escapeHTML(message).replace(emoteRegex, function (match) {
-			return '<img src=' + emoticons[match] + '>';
-		});
-		return html + message;
-	}
-	return false;
-}
-global.parseEmoticons = parseEmoticons;
-
-
-exports.commands = {
-    emoticons: 'emoticon',
-    emote: 'emoticon',
-    emotes: 'emoticon',
-    emoticon: function (target, room, user) {
-        if (!target) target = 'help';
-        var parts = target.split(',');
-        for (var u in parts) parts[u] = parts[u].trim();
- 
-        switch (parts[0]) {
-            case 'add':
-                if (!parts[2]) return this.sendReply("Usage: /emoticon add, [name], [url] - Remember to resize the image first! (recommended 30x30)");
-                if (emoticons[parts[1]]) return this.sendReply("\"" + parts[1] + "\" is already an emoticon.");
-                emoticons[parts[1]] = parts[2];
-                saveEmoticons();
-                this.sendReply('|raw|The emoticon "' + Tools.escapeHTML(parts[1]) + '" has been added: <img src="' + parts[2] + '">');
-                break;
-
-            case 'delete':
-            case 'remove':
-            case 'rem':
-            case 'del':
-                if (!parts[1]) return this.sendReply("Usage: /emoticon del, [name]");
-                if (!emoticons[parts[1]]) return this.sendReply("The emoticon \"" + parts[1] + "\" does not exist.");
-                delete emoticons[parts[1]];
-                saveEmoticons();
-                this.sendReply("The emoticon \"" + parts[1] + "\" has been removed.");
-                break;
-
-            case 'on':
-            case 'enable':
-            case 'disable':
-            case 'off':
-            	if (!this.can('roommod', null, room)) return this.sendReply('Access denied.');
-                var status = ((parts[0] === 'enable' || parts[0] === 'on') ? true : false);
-                if (room.disableEmoticons === status) return this.sendReply("Emoticons are already " + (status ? "enabled" : "disabled") + " in this room.");
-                room.disableEmoticons = status;
-                room.chatRoomData.disableEmoticons = status;
-                Rooms.global.writeChatRoomData();
-                this.privateModCommand('(' + user.name + ' ' + (status ? ' enabled ' : ' disabled ') + 'emoticons in this room.)');
-                break;
-
-            case 'view':
-            case 'list':
-                if (!this.canBroadcast()) return;
-                var reply = "<b><u>Emoticons (" + Object.size(emoticons) + ")</u></b><br />";
-                for (var emote in emoticons) reply += "(" + emote + " <img src=\"" + emoticons[emote] + "\">) ";
-                this.sendReplyBox(reply);
-                break;
-
-            default:
-            case 'help':
-                if (!this.canBroadcast()) return;
-                this.sendReplyBox(
-                    "Emoticon Commands:<br />" +
-                    "<small>/emoticon may be substituted with /emoticons, /emotes, or /emote</small><br />" +
-                    "/emoticon add, [name], [url] - Adds an emoticon.<br />" +
-                    "/emoticon del/delete/remove/rem, [name] - Removes an emoticon.<br />" +
-                    "/emoticon enable/on/disable/off - Enables or disables emoticons in the current room.<br />" +
-                    "/emoticon view/list - Displays the list of emoticons.<br />" +
-                    "/emoticon help - Displays this help command.<br />" +
-                    "<a href=\"https://gist.github.com/jd4564/ef66ecc47c58b3bb06ec\">Emoticon Plugin by: jd</a>"
-                );
-                break;
-        }
-    }
+let emotes = {
+	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
+	'4Head': 'https://static-cdn.jtvnw.net/emoticons/v1/354/1.0',
+	'DansGame': 'https://static-cdn.jtvnw.net/emoticons/v1/33/1.0',
+	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png',
+	'EleGiggle': 'https://static-cdn.jtvnw.net/emoticons/v1/4339/2.0',
+	'FacePalm': 'http://i.imgur.com/lv3GmpM.png',
+	'FailFish': 'https://static-cdn.jtvnw.net/emoticons/v1/360/1.0',
+	'feelsackbr': 'http://i.imgur.com/BzZJedC.jpg?1',
+	'feelsbebop': 'http://i.imgur.com/TDwC3wL.png',
+	'feelsbd': 'http://i.imgur.com/YyEdmwX.png',
+	'feelsbirb': 'http://i.imgur.com/o4KxmWe.png',
+	'feelsbm': 'http://i.imgur.com/xwfJb2z.png',
+	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
+	'feelsbt': 'http://i.imgur.com/rghiV9b.png',
+	'feelschime': 'http://i.imgur.com/uIIBChH.png',
+	'feelscrazy': 'http://i.imgur.com/NiJsT5W.png',
+	'feelscool': 'http://i.imgur.com/qdGngVl.jpg?1',
+	'feelscri': 'http://i.imgur.com/QAuUW7u.jpg?1',
+	'feelscx': 'http://i.imgur.com/zRSUw2n.gif',
+	'feelsdd': 'http://i.imgur.com/fXtdLtV.png',
+	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
+	'feelsemo': 'http://i.imgur.com/FPolh5d.jpg',
+	'feelsfdra': 'http://i.imgur.com/ZIcl9Zy.jpg',
+	'feelsfro': 'http://i.imgur.com/ijJakJT.png',
+	'feelsgay': 'http://i.imgur.com/zQAacwu.png?1',
+	'feelsgd': 'http://i.imgur.com/Jf0n4BL.png',
+	'feelsgn': 'http://i.imgur.com/juJQh0J.png',
+	'feelsgro': 'http://i.imgur.com/jLhP0bZ.png?1',
+	'feelshigh': 'http://i.imgur.com/s9I2bxp.jpg?1',
+	'feelshlwn': 'http://i.imgur.com/OHMDVNJ.jpg',
+	'feelshp': 'http://i.imgur.com/1W19BDG.png',
+	'feelsho': 'http://i.imgur.com/J4oUHm2.png?1',
+	'feelsilum': 'http://i.imgur.com/CnyGTTD.png',
+	'feelsjig': 'http://i.imgur.com/hSzqy5z.png?1',
+	'feelsjpn': 'http://i.imgur.com/Zz2WrQf.jpg',
+	'feelskawaii': 'http://i.imgur.com/kLnDaYD.png', 
+	'feelsky': 'http://i.imgur.com/BtATPId.png?1',
+	'feelslelouch': 'http://i.imgur.com/qZrV75o.png',
+	'feelslot': 'http://i.imgur.com/tl88F7i.png?1',
+	'feelslu': 'http://i.imgur.com/REEBSOT.png?1',
+	'feelsmd': 'http://i.imgur.com/DJHMdSw.png',
+	'feelsmixtape': 'http://i.imgur.com/7lncwng.png',
+	'feelsnv': 'http://i.imgur.com/XF6kIdJ.png',
+	'feelsns': 'http://i.imgur.com/jYRFUYW.jpg?1',
+	'feelsok': 'http://i.imgur.com/gu3Osve.png',
+	'feelsorange': 'http://i.imgur.com/3fxXP16.jpg',
+	'feelspanda': 'http://i.imgur.com/qi7fue9.png',
+	'feelspaul': 'http://imgur.com/KuDZMJR.png',
+	'feelsshrk': 'http://i.imgur.com/amTG3jF.jpg',
+	'feelspika': 'http://i.imgur.com/mBq3BAW.png',
+	'feelsPika': 'http://i.imgur.com/eoTrTkn.png?1',
+	'feelspink': 'http://i.imgur.com/jqfB8Di.png',
+	'feelspn': 'http://i.imgur.com/wSSM6Zk.png',
+	'feelspoli': 'http://i.imgur.com/FnzhrWa.jpg?1',
+	'feelsPoli': 'http://i.imgur.com/sbKhXZE.jpg?1',
+	'feelsrb': 'http://i.imgur.com/L6ak1Uk.png',
+	'feelsrg': 'http://i.imgur.com/DsRQCsI.png',
+	'feelsrs': 'http://i.imgur.com/qGEot0R.png',
+	'feelssc': 'http://i.imgur.com/cm6oTZ1.png',
+	'feelsseis': 'http://i.imgur.com/gGGYxrE.png?1',
+	'feelsshi': 'http://i.imgur.com/VzlGZ1M.jpg',
+	'feelsslo': 'http://i.imgur.com/iQuToJf.jpg?1',
+	'feelssnake': 'http://i.imgur.com/xoJnDUD.png',
+	'feelstea': 'http://i.imgur.com/M0f2zgJ.jpg?1',
+	'feelstired': 'http://i.imgur.com/EgYViOs.jpg',
+	'feelsdrg': 'http://i.imgur.com/UZzWcA3.png',
+	'feelsvolc': 'http://i.imgur.com/QXlKzZd.png?1',
+	'feelsvpn': 'http://i.imgur.com/ODTZISl.gif',
+	'feelswin': 'http://i.imgur.com/rbs9pZG.png?1',
+	'feelswnk': 'http://i.imgur.com/K1GhJaN.png', 
+	'funnylol': 'http://i.imgur.com/SlzCghq.png',
+	'happyface': 'http://imgur.com/krzCL3j.jpg',
+	'hmmface': 'http://i.imgur.com/Z5lOwfZ.png',
+	'hypnotoad': 'http://i.imgur.com/lJtbSfl.gif',
+	'jcena': 'http://i.imgur.com/hPz30Ol.jpg?2',
+	'Kappa': 'http://i.imgur.com/ZxRU4z3.png?1',
+	'Kreygasm': 'https://static-cdn.jtvnw.net/emoticons/v1/41/1.0',
+	'meGusta': 'http://cdn.overclock.net/3/36/50x50px-ZC-369517fd_me-gusta-me-gusta-s.png',
+	'MingLee': 'https://static-cdn.jtvnw.net/emoticons/v1/68856/2.0',
+	'noface': 'http://i.imgur.com/H744eRE.png',
+	'Obama': 'http://i.imgur.com/rBA9M7A.png',
+	'oshet': 'http://i.imgur.com/yr5DjuZ.png',
+	'PeoplesChamp': 'http://i.imgur.com/QMiMBKe.png',
+	'Sanic': 'http://i.imgur.com/Y6etmna.png',
+	'stevo': 'http://imgur.com/Gid6Zjy.png',
+	'thumbsup': 'http://i.imgur.com/eWcFLLn.jpg',
+	'trollface': 'http://cdn.overclock.net/a/a0/50x50px-ZC-a0e3f9a7_troll-troll-face.png',
+	'trumpW': 'https://static-cdn.jtvnw.net/emoticons/v1/35218/1.0',
+	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
+	'WutFace': 'https://static-cdn.jtvnw.net/emoticons/v1/28087/2.0',
+	'xaa': 'http://i.imgur.com/V728AvL.png',
+	'xoxo': 'http://orig00.deviantart.net/b49d/f/2014/220/5/3/ichigo_not_impressed_icon_by_magical_icon-d7u92zg.png',
+	'yayface': 'http://i.imgur.com/anY1jf8.png',
+	'yesface': 'http://i.imgur.com/k9YCF6K.png',
+	'youdontsay': 'http://r32.imgfast.net/users/3215/23/26/64/smiles/280467785.jpg',
+	'gudone': 'http://i.imgur.com/USkp1b9.png',
+	'feelsfloat': 'http://i.imgur.com/XKP1Kpf.gif'
 };
 
-function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+let emotesKeys = Object.keys(emotes);
+let patterns = [];
+let metachars = /[[\]{}()*+?.\\|^$\-,&#\s]/g;
+
+for (let i in emotes) {
+	if (emotes.hasOwnProperty(i)) {
+		patterns.push('(' + i.replace(metachars, '\\$&') + ')');
+	}
+}
+let patternRegex = new RegExp(patterns.join('|'), 'g');
+
+/**
+ * Parse emoticons in message.
+ *
+ * @param {String} message
+ * @param {Object} room
+ * @param {Object} user
+ * @param {Boolean} pm - returns a string if it is in private messages
+ * @returns {Boolean|String}
+ */
+function parseEmoticons(message, room, user, pm) {
+	if (room.WarlicMode && !pm) {
+		room.add('|c|' + user.getIdentity().charAt(0) + user.name + '|' + parseWarlic(message));
+		return true;
+	}
+	if (typeof message !== 'string' || (!pm && room.disableEmoticons) && !~developers.indexOf(user.userid)) return false;
+
+	let match = false;
+	let len = emotesKeys.length;
+
+
+	while (len--) {
+		if (message && message.indexOf(emotesKeys[len]) >= 0) {
+			match = true;
+			break;
+		}
+	}
+
+	if (!match) return false;
+		
+	//shadowbanroom message
+	let sbanmsg = message;
+
+	// escape HTML
+	message = Tools.escapeHTML(message);
+
+	// add emotes
+	message = message.replace(patternRegex, function (match) {
+		let emote = emotes[match];
+		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="50" width="50" />' : match;
+	});
+
+	// __italics__
+	message = message.replace(/\_\_([^< ](?:[^<]*?[^< ])?)\_\_(?![^<]*?<\/a)/g, '<i>$1</i>');
+
+	// **bold**
+	message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
+
+	let group = user.getIdentity().charAt(0);
+	if (room.auth) group = room.auth[user.userid] || group;
+	if(pm) group = user.group;
+
+	let style = "background:none;border:0;padding:0 5px 0 0;font-family:Verdana,Helvetica,Arial,sans-serif;font-size:9pt;cursor:pointer";
+
+	message = "<div class='chat'>" + "<small>" + group + "</small>" + "<button name='parseCommand' value='/user " + user.name + "' style='" + style + "'>" + "<b><font color='" + color(user.userid) + "'>" + user.name + ":</font></b>" + "</button><em class='mine'>" + message + "</em></div>";
+	if (pm) return message;
+	if (Users.ShadowBan.checkBanned(user)) {
+		user.sendTo(room, '|html|' + message);
+		Users.ShadowBan.addMessage(user, "To " + room, sbanmsg);
+	}
+	if (!Users.ShadowBan.checkBanned(user)) room.addRaw(message);
+	return true;
 }
 
-function MD5(f){function i(b,c){var d,e,f,g,h;f=b&2147483648;g=c&2147483648;d=b&1073741824;e=c&1073741824;h=(b&1073741823)+(c&1073741823);return d&e?h^2147483648^f^g:d|e?h&1073741824?h^3221225472^f^g:h^1073741824^f^g:h^f^g}function j(b,c,d,e,f,g,h){b=i(b,i(i(c&d|~c&e,f),h));return i(b<<g|b>>>32-g,c)}function k(b,c,d,e,f,g,h){b=i(b,i(i(c&e|d&~e,f),h));return i(b<<g|b>>>32-g,c)}function l(b,c,e,d,f,g,h){b=i(b,i(i(c^e^d,f),h));return i(b<<g|b>>>32-g,c)}function m(b,c,e,d,f,g,h){b=i(b,i(i(e^(c|~d),
-f),h));return i(b<<g|b>>>32-g,c)}function n(b){var c="",e="",d;for(d=0;d<=3;d++)e=b>>>d*8&255,e="0"+e.toString(16),c+=e.substr(e.length-2,2);return c}var g=[],o,p,q,r,b,c,d,e,f=function(b){for(var b=b.replace(/\r\n/g,"\n"),c="",e=0;e<b.length;e++){var d=b.charCodeAt(e);d<128?c+=String.fromCharCode(d):(d>127&&d<2048?c+=String.fromCharCode(d>>6|192):(c+=String.fromCharCode(d>>12|224),c+=String.fromCharCode(d>>6&63|128)),c+=String.fromCharCode(d&63|128))}return c}(f),g=function(b){var c,d=b.length;c=
-d+8;for(var e=((c-c%64)/64+1)*16,f=Array(e-1),g=0,h=0;h<d;)c=(h-h%4)/4,g=h%4*8,f[c]|=b.charCodeAt(h)<<g,h++;f[(h-h%4)/4]|=128<<h%4*8;f[e-2]=d<<3;f[e-1]=d>>>29;return f}(f);b=1732584193;c=4023233417;d=2562383102;e=271733878;for(f=0;f<g.length;f+=16)o=b,p=c,q=d,r=e,b=j(b,c,d,e,g[f+0],7,3614090360),e=j(e,b,c,d,g[f+1],12,3905402710),d=j(d,e,b,c,g[f+2],17,606105819),c=j(c,d,e,b,g[f+3],22,3250441966),b=j(b,c,d,e,g[f+4],7,4118548399),e=j(e,b,c,d,g[f+5],12,1200080426),d=j(d,e,b,c,g[f+6],17,2821735955),c=
-j(c,d,e,b,g[f+7],22,4249261313),b=j(b,c,d,e,g[f+8],7,1770035416),e=j(e,b,c,d,g[f+9],12,2336552879),d=j(d,e,b,c,g[f+10],17,4294925233),c=j(c,d,e,b,g[f+11],22,2304563134),b=j(b,c,d,e,g[f+12],7,1804603682),e=j(e,b,c,d,g[f+13],12,4254626195),d=j(d,e,b,c,g[f+14],17,2792965006),c=j(c,d,e,b,g[f+15],22,1236535329),b=k(b,c,d,e,g[f+1],5,4129170786),e=k(e,b,c,d,g[f+6],9,3225465664),d=k(d,e,b,c,g[f+11],14,643717713),c=k(c,d,e,b,g[f+0],20,3921069994),b=k(b,c,d,e,g[f+5],5,3593408605),e=k(e,b,c,d,g[f+10],9,38016083),
-d=k(d,e,b,c,g[f+15],14,3634488961),c=k(c,d,e,b,g[f+4],20,3889429448),b=k(b,c,d,e,g[f+9],5,568446438),e=k(e,b,c,d,g[f+14],9,3275163606),d=k(d,e,b,c,g[f+3],14,4107603335),c=k(c,d,e,b,g[f+8],20,1163531501),b=k(b,c,d,e,g[f+13],5,2850285829),e=k(e,b,c,d,g[f+2],9,4243563512),d=k(d,e,b,c,g[f+7],14,1735328473),c=k(c,d,e,b,g[f+12],20,2368359562),b=l(b,c,d,e,g[f+5],4,4294588738),e=l(e,b,c,d,g[f+8],11,2272392833),d=l(d,e,b,c,g[f+11],16,1839030562),c=l(c,d,e,b,g[f+14],23,4259657740),b=l(b,c,d,e,g[f+1],4,2763975236),
-e=l(e,b,c,d,g[f+4],11,1272893353),d=l(d,e,b,c,g[f+7],16,4139469664),c=l(c,d,e,b,g[f+10],23,3200236656),b=l(b,c,d,e,g[f+13],4,681279174),e=l(e,b,c,d,g[f+0],11,3936430074),d=l(d,e,b,c,g[f+3],16,3572445317),c=l(c,d,e,b,g[f+6],23,76029189),b=l(b,c,d,e,g[f+9],4,3654602809),e=l(e,b,c,d,g[f+12],11,3873151461),d=l(d,e,b,c,g[f+15],16,530742520),c=l(c,d,e,b,g[f+2],23,3299628645),b=m(b,c,d,e,g[f+0],6,4096336452),e=m(e,b,c,d,g[f+7],10,1126891415),d=m(d,e,b,c,g[f+14],15,2878612391),c=m(c,d,e,b,g[f+5],21,4237533241),
-b=m(b,c,d,e,g[f+12],6,1700485571),e=m(e,b,c,d,g[f+3],10,2399980690),d=m(d,e,b,c,g[f+10],15,4293915773),c=m(c,d,e,b,g[f+1],21,2240044497),b=m(b,c,d,e,g[f+8],6,1873313359),e=m(e,b,c,d,g[f+15],10,4264355552),d=m(d,e,b,c,g[f+6],15,2734768916),c=m(c,d,e,b,g[f+13],21,1309151649),b=m(b,c,d,e,g[f+4],6,4149444226),e=m(e,b,c,d,g[f+11],10,3174756917),d=m(d,e,b,c,g[f+2],15,718787259),c=m(c,d,e,b,g[f+9],21,3951481745),b=i(b,o),c=i(c,p),d=i(d,q),e=i(e,r);return(n(b)+n(c)+n(d)+n(e)).toLowerCase()};
+/**
+ * Create a two column table listing emoticons.
+ *
+ * @return {String} emotes table
+ */
+function create_table() {
+	let emotes_name = Object.keys(emotes);
+	let emotes_list = [];
+	let emotes_group_list = [];
+	let len = emotes_name.length;
 
-var colorCache = {};
-function hashColor (name) {
-    name = toId(name);
-    if (colorCache[name]) return colorCache[name];
+	for (let i = 0; i < len; i++) {
+		emotes_list.push("<td>" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
+			emotes_name[i] + "</td>");
+	}
 
-    var hash = MD5(name);
-    var H = parseInt(hash.substr(4, 4), 16) % 360;
-    var S = parseInt(hash.substr(0, 4), 16) % 50 + 50;
-    var L = parseInt(hash.substr(8, 4), 16) % 20 + 25;
+	let emotes_list_right = emotes_list.splice(len / 2, len / 2);
 
-    var rgb = hslToRgb(H, S, L);
-    colorCache[name] = "#" + rgbToHex(rgb.r, rgb.g, rgb.b);
-    return colorCache[name];
+	for (let i = 0; i < len / 2; i++) {
+		let emote1 = emotes_list[i],
+			emote2 = emotes_list_right[i];
+		if (emote2) {
+			emotes_group_list.push("<tr>" + emote1 + emote2 + "</tr>");
+		} else {
+			emotes_group_list.push("<tr>" + emote1 + "</tr>");
+		}
+	}
+	return "<div class='infobox'><center><b><u>List of Emoticons</u></b></center>" + "<div class='infobox-limited'><table border='1' cellspacing='0' cellpadding='5' width='100%'>" + "<tbody>" + emotes_group_list.join("") + "</tbody>" + "</table></div></div>";
 }
 
-function hslToRgb(h, s, l) {
-    var r, g, b, m, c, x;
+let emotes_table = create_table();
 
-    if (!isFinite(h)) h = 0;
-    if (!isFinite(s)) s = 0;
-    if (!isFinite(l)) l = 0;
+exports.commands = {
+	blockemote: 'blockemoticons',
+	blockemotes: 'blockemoticons',
+	blockemoticon: 'blockemoticons',
+	blockemoticons: function (target, room, user) {
+		if (user.blockEmoticons === (target || true)) return this.sendReply("You are already blocking emoticons in private messages! To unblock, use /unblockemoticons");
+		user.blockEmoticons = true;
+		return this.sendReply("You are now blocking emoticons in private messages.");
+	},
+	blockemoticonshelp: ["/blockemoticons - Blocks emoticons in private messages. Unblock them with /unblockemoticons."],
 
-    h /= 60;
-    if (h < 0) h = 6 - (-h % 6);
-    h %= 6;
+	unblockemote: 'unblockemoticons',
+	unblockemotes: 'unblockemoticons',
+	unblockemoticon: 'unblockemoticons',
+	unblockemoticons: function (target, room, user) {
+		if (!user.blockEmoticons) return this.sendReply("You are not blocking emoticons in private messages! To block, use /blockemoticons");
+		user.blockEmoticons = false;
+		return this.sendReply("You are no longer blocking emoticons in private messages.");
+	},
+	unblockemoticonshelp: ["/unblockemoticons - Unblocks emoticons in private messages. Block them with /blockemoticons."],
 
-    s = Math.max(0, Math.min(1, s / 100));
-    l = Math.max(0, Math.min(1, l / 100));
+	emotes: 'emoticons',
+	emoticons: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReply("|raw|" + emotes_table);
+	},
+	emoticonshelp: ["/emoticons - Get a list of emoticons."],
 
-    c = (1 - Math.abs((2 * l) - 1)) * s;
-    x = c * (1 - Math.abs((h % 2) - 1));
+	toggleemote: 'toggleemoticons',
+	toggleemotes: 'toggleemoticons',
+	toggleemoticons: function (target, room, user) {
+		if (!this.can('declare', null, room)) return this.errorReply("Access denied.");
+		room.disableEmoticons = !room.disableEmoticons;
+		this.sendReply("Disallowing emoticons is set to " + room.disableEmoticons + " in this room.");
+		if (room.disableEmoticons) {
+			this.add("|raw|<div class=\"broadcast-red\" style=\"border-radius: 5px;\"><b>Emoticons are disabled!</b><br />Emoticons will not work.</div>");
+		} else {
+			this.add("|raw|<div class=\"broadcast-blue\" style=\"border-radius: 5px;\"><b>Emoticons are enabled!</b><br />Emoticons will work now.</div>");
+		}
+	},
+	toggleemoticonshelp: ["/toggleemoticons - Toggle emoticons on or off."],
 
-    if (h < 1) {
-        r = c;
-        g = x;
-        b = 0;
-    } else if (h < 2) {
-        r = x;
-        g = c;
-        b = 0;
-    } else if (h < 3) {
-        r = 0;
-        g = c;
-        b = x;
-    } else if (h < 4) {
-        r = 0;
-        g = x;
-        b = c;
-    } else if (h < 5) {
-        r = x;
-        g = 0;
-        b = c;
-    } else {
-        r = c;
-        g = 0;
-        b = x;
-    }
-
-    m = l - c / 2;
-    r = Math.round((r + m) * 255);
-    g = Math.round((g + m) * 255);
-    b = Math.round((b + m) * 255);
-
-    return {
-        r: r,
-        g: g,
-        b: b
-    };
-}
-
-function rgbToHex(R, G, B) {
-    return toHex(R) + toHex(G) + toHex(B);
-}
-
-function toHex(N) {
-    if (N === null) return "00";
-    N = parseInt(N);
-    if (N === 0 || isNaN(N)) return "00";
-    N = Math.max(0, N);
-    N = Math.min(N, 255);
-    N = Math.round(N);
-    return "0123456789ABCDEF".charAt((N - N % 16) / 16) + "0123456789ABCDEF".charAt(N % 16);
-}
+	rande: 'randemote',
+	randemote: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		let rng = Math.floor(Math.random() * emotesKeys.length);
+		let randomEmote = emotesKeys[rng];
+		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
+	},
+	randemotehelp: ["/randemote - Get a random emote."]
+};
