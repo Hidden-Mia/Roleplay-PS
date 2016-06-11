@@ -239,10 +239,7 @@ exports.commands = {
 		let emoteMsg = parseEmoticons(target, room, user, true);
 		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
 
-		    var emoticons = parseEmoticons(user.getIdentity(room.id), target);
-    if (emoticons) {
-        target = "/html " + emoticons;
-    }
+		message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 
 		user.send(message);
 		if (targetUser !== user) {
@@ -781,7 +778,8 @@ exports.commands = {
 			delete Rooms.aliases[alias];
 			Rooms.global.writeChatRoomData();
 		}
-	}
+	},
+
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
@@ -809,7 +807,6 @@ exports.commands = {
 		Rooms.global.writeChatRoomData();
 	},
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
-
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
