@@ -1,3 +1,5 @@
+'Use strict';
+
 var color = require('../config/color');
 
 /**
