@@ -781,35 +781,7 @@ exports.commands = {
 			delete Rooms.aliases[alias];
 			Rooms.global.writeChatRoomData();
 		}
-	},
-
-	roomowner: function (target, room, user) {
-		if (!room.chatRoomData) {
-			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
-		}
-		if (!target) return this.parse('/help roomowner');
-		target = this.splitTarget(target, true);
-		let targetUser = this.targetUser;
-		let name = this.targetUsername;
-		let userid = toId(name);
-
-		if (!Users.isUsernameKnown(userid)) {
-			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
-		}
-
-		if (!this.can('makeroom')) return false;
-
-		if (!room.auth) room.auth = room.chatRoomData.auth = {};
-
-		room.auth[userid] = '#';
-		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
-		if (targetUser) {
-			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
-			room.onUpdateIdentity(targetUser);
-		}
-		Rooms.global.writeChatRoomData();
-	},
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
+	}
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
