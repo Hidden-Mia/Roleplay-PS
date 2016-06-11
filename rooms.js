@@ -107,7 +107,12 @@ let Room = (() => {
  				Users.ShadowBan.addMessage(user, "To " + this.id, message);
  				connection.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
  			} else {
- 				this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+ 				    var emoticons = parseEmoticons(user.getIdentity(this.roomid), message);
+    if (emoticons && !room.disableEmoticons) {
+        this.addRaw(emoticons);
+    } else {
+        this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+    }
  				this.messageCount++;
  			}
 		}
