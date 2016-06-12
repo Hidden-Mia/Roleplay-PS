@@ -183,28 +183,6 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
-	regdate: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		if (!target || !toId(target)) return this.parse('/help regdate');
-		let username = toId(target);
-		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
-			if (error && response.statusCode !== 200) {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
-				return room.update();
-			}
-			let regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
-			if (regdate === '(Unregistered)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
-			} else if (regdate === '(Account disabled)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + "'s account is disabled.");
-			} else {
-				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
-			}
-			room.update();
-		}.bind(this));
-	},
-	regdatehelp: ["/regdate - Please specify a valid username."],
-
 	show: function (target, room, user) {
 		if (!this.can('lock')) return false;
 		user.hiding = false;
@@ -218,18 +196,6 @@ exports.commands = {
 		this.sendReply("|raw|This server uses <a href='https://github.com/CreaturePhil/Showdown-Boilerplate'>Showdown-Boilerplate</a>.");
 	},
 	showdownboilerplatehelp: ["/showdownboilerplate - Links to the Showdown-Boilerplate repository on Github."],
-
-	seen: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		if (!target) return this.parse('/help seen');
-		let targetUser = Users.get(target);
-		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
-		target = Tools.escapeHTML(target);
-		let seen = Db('seen').get(toId(target));
-		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
-		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
-	},
-	seenhelp: ["/seen - Shows when the user last connected on the server."],
 
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
