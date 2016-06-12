@@ -26,6 +26,10 @@ exports.commands = {
 			Db('vips').delete(vipUser);
 			this.sendReply(vipUser + '\'s vip status has been taken.');
 		},
+                vip: 'viphelp',
+                viphelp: function (target, room, user) {
+                         this.sendReplyBox("<center><b><u>VIP Commands</u></b><br /><b>/givevip [user]</b> - give vip status.<br /><b>/takevip [user] </b> - take vip membership of an vip user.<br /><b>/viplist</b> - shows vip member list.<br /></center>");
+                         },
 		viplist: function (target, room, user) {
 			if (!this.can('declare')) return false;
 			if (!Object.keys(Db('vips').object()).length) return this.errorReply('There seems to be no user with vip status.');
