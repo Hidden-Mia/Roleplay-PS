@@ -321,6 +321,8 @@ exports.commands = {
 		new: 'create',
 		create: function (target, room, user) {
 			if (!this.can('broadcast', null, room)) return false;
+		        if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of Blackjack in the <button name = "send" value = "/join casino">Casino</button>');
+	
 			if (room.bj) return this.sendReply("A blackjack game has already been created in this room.");
 
 			var amount = isMoney(target);
