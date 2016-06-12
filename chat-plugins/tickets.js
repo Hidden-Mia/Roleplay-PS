@@ -319,11 +319,11 @@ exports.commands = {
 		this.sendReply("|raw|" + display);
 	},
 
-	numbergame: 'startnumber',
-	numberstart: 'startnumber',
-	startnumber: function (target, room, user) {
+	ticketdice: 'startticketdice',
+	startticketdice: 'starttd',
+	starttd: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
-		if (!target) return this.parse('/help startnumber');
+		if (!target) return this.parse('/tdhelp');
 		if (!this.canTalk()) return this.errorReply("You can not start number games while unable to speak.");
 
 		let amount = isTicket(target);
@@ -337,19 +337,22 @@ exports.commands = {
 		// Prevent ending a dice game too early.
 		room.number.startTime = Date.now();
 
-		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a number game for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joinnumber'>Click to join.</button></center></h2></div>");
+		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a ticket dice for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joinnumber'>Click to join.</button></center></h2></div>");
 	},
-	startnumberhelp: ["/startnumber [bet] - Start a dice game to gamble for tickets."],
+	tdhelp: function(target, room, user) {
+                this.sendReplyBox("<center><b><>Ticket Dice Commands</u></b><br /><b>/starttd [bet]</b> - Start a dice game to gamble for tickets.<br /> <b>/jointd</b> - join ticket dice.<br /><b>/endtd</b> - end ticket dice.<br />");
+        },
 
-	joinnumber: function (target, room, user) {
-		if (!room.number || (room.number.p1 && room.number.p2)) return this.errorReply("There is no number game in it's signup phase in this room.");
-		if (!this.canTalk()) return this.errorReply("You may not join number games while unable to speak.");
-		if (room.number.p1 === user.userid) return this.errorReply("You already entered this number game.");
+	joinnticketdice: 'jointd',
+        jointd: function (target, room, user) {
+		if (!room.number || (room.number.p1 && room.number.p2)) return this.errorReply("There is no ticket dice in it's signup phase in this room.");
+		if (!this.canTalk()) return this.errorReply("You may not join ticket dice while unable to speak.");
+		if (room.number.p1 === user.userid) return this.errorReply("You already joined this ticket dice.");
 		if (Db('ticket').get(user.userid, 0) < room.number.bet) return this.errorReply("You don't have enough tickets to join this game.");
 		Db('ticket').set(user.userid, Db('ticket').get(user.userid) - room.number.bet);
 		if (!room.number.p1) {
 			room.number.p1 = user.userid;
-			room.addRaw("<b>" + user.name + " has joined the number game.</b>");
+			room.addRaw("<b>" + user.name + " has joined the ticket dice.</b>");
 			return;
 		}
 		room.number.p2 = user.userid;
@@ -370,13 +373,14 @@ exports.commands = {
 		delete room.number;
 	},
 
-	endnumber: function (target, room, user) {
+	endtd: 'endticketdice',
+        endticketdice: function (target, room, user) {
 		if (!user.can('broadcast', null, room)) return false;
-		if (!room.number) return this.errorReply("There is no number game in this room.");
-		if ((Date.now() - room.number.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a number game within the first minute of it starting.");
-		if (room.number.p2) return this.errorReply("Number game has already started.");
+		if (!room.number) return this.errorReply("There is no ticket dice in this room.");
+		if ((Date.now() - room.number.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a ticket dice within the first minute of it starting.");
+		if (room.number.p2) return this.errorReply("Ticket dice has already started.");
 		if (room.number.p1) Db('ticket').set(room.number.p1, Db('ticket').get(room.number.p1, 0) + room.number.bet);
-		room.addRaw("<b>" + user.name + " ended the number game.</b>");
+		room.addRaw("<b>" + user.name + " ended the ticket dice.</b>");
 		delete room.number;
 	},
 
