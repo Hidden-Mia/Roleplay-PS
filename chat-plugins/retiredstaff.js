@@ -28,7 +28,7 @@ exports.commands = {
 		},
                 rstaff: 'retiredstaff',
                 retiredstaff: function (target, room, user) {
-                        this.sendReplyBox("<center><b><u>Retired Staff Commands By: Prince Sky</u></b><br /><b>/addrstaff</b> - add retired staff.<br /><b>/removerstaff</b> - remove retired staff.<br /><b>/rstafflist</b> - shows retired staff list.<br />");
+                        this.sendReplyBox("<center><b><u>Retired Staff Commands By: Prince Sky</u></b><br /><b>/addrstaff [user] </b> - add retired staff.<br /><b>/removerstaff [user]</b> - remove retired staff.<br /><b>/rstafflist</b> - shows retired staff list.<br />");
                 },
 
 		rstafflist: function (target, room, user) {
