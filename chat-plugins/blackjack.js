@@ -109,12 +109,11 @@ var BJView = {
 	},
 
 	create: function (creator, pot) {
-		var output = "<div class='infobox'><div style="background-image: url(&quotehttp://www.pix123.com/blackjackdatabase/201406/Jun04/173-04062014061745.png&quot;); background-size: 100%"><div style="background: rgba(0, 5, 0, 0.5); background-size: 100%">
-<center><h2><b><font color="white"><font face="georgia">Blackjack Game</font></font></b></h2>";
-		output += "<font color="white"><font face="georgia"><b>Created by:</b> <i>" + creator + "</i></span></font></font>";
-		output += "<font color="green'><b>Pot: </b></font><span style='color:red'>" + pot + "</span>";
+		var output = "<div class='infobox'><center><h2><b>Blackjack Game</b></h2>";
+		output += "<span style='padding:20px'><b>Created by:</b> " + creator + "</span>";
+		output += "<span style='padding:20px'>Pot: <span style='color:red'>" + pot + "</span></span>";
 		output += "<br /><button name='send' value='/bj join' style='margin: 5px'>Join</button>";
-		output += "</center></div></div></div>";
+		output += "</center></div>";
 		this.addRaw(output);
 	},
 
