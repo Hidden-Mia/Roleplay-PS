@@ -2,7 +2,7 @@
 
 // The server port - the port to run Pokemon Showdown under
 exports.port = process.env.PORT;
-exports.port = process.env.PORT
+exports.port = process.env.PORT;
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
@@ -363,22 +363,22 @@ exports.grouplist = [
 		joinbattle: true,
 		minigame: true,
 	},
-        {
-                symbol: '$',
-                id: "operator",
-                name: Operator",
-                inherit: '+',
-                warn: true,
-                mute: true,
-                tournamentsmodetation: true,
-                tournaments: true,
-                broadcast: true,
-                minigame: true,
-                joinbattle: true,
-                modlog: true,
-                kick: true,
-                lock: true,
-                alts: '%u',
+    {
+        symbol: '$',
+        id: "operator",
+        name: "Operator",
+        inherit: '+',
+        warn: true,
+        mute: true,
+        tournamentsmodetation: true,
+        tournaments: true,
+        broadcast: true,
+        minigame: true,
+        joinbattle: true,
+        modlog: true,
+        kick: true,
+        lock: true,
+        alts: '%u',
 		bypassblocks: 'u%@&~',
         },
 	{
