@@ -139,10 +139,7 @@ class Ambush {
 	getWinner() {
 		let winner = this.getSurvivors()[0][0].name;
 		let msg = '|html|<div class = "infobox"><center>The winner of this game of ambush is <b>' + Tools.escapeHTML(winner) + '!</b> Congratulations!</center>';
-		if (this.room.id === 'lobby') {
-			msg += '<center>' + Tools.escapeHTML(winner) + ' has also won <b>5</b> tickets for winning!</center>';
-			Db('ticket').set(toId(user.userid), Db('ticket').get(toId(user), 0) + 5).get(toId(user.userid) () => this.room.add(msg).update());
-		} else {
+		{
 			this.room.add(msg).update();
 		}
 		this.end();
