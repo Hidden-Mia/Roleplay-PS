@@ -316,6 +316,10 @@ Blackjack.prototype.hasPlayerWinOrBust = function (player) {
 };
 
 exports.commands = {
+        bjhelp: 'blackjackhelp',
+        blackjackhelp: function(target, room, user) {
+                       this.sendReplyBox("<center><b><u>Blackjack Commands</u></b><br /></center><b>/bj [new/create] [bucks]</b> - create game of blackjack for certian amount of bucks.<br /><b>/bj [end]</b> - end game of blackjack.<br /><b>/bj [start]</b> - start game of blackjack.<br /><b>/bjhelp</b> - shows blackjack commands.<br />");
+               },
 	bj: 'blackjack',
 	blackjack: {
 		new: 'create',
