@@ -337,10 +337,10 @@ exports.commands = {
 		// Prevent ending a dice game too early.
 		room.number.startTime = Date.now();
 
-		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a ticket dice for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joinnumber'>Click to join.</button></center></h2></div>");
+		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a ticket dice for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/jointd'>Click to join.</button></center></h2></div>");
 	},
 	tdhelp: function(target, room, user) {
-                this.sendReplyBox("<center><b><>Ticket Dice Commands</u></b><br /><b>/starttd [bet]</b> - Start a dice game to gamble for tickets.<br /> <b>/jointd</b> - join ticket dice.<br /><b>/endtd</b> - end ticket dice.<br />");
+                this.sendReplyBox("<center><b><u>Ticket Dice Commands</u></b><br /><b>/starttd [bet]</b> - Start a dice game to gamble for tickets.<br /> <b>/jointd</b> - join ticket dice.<br /><b>/endtd</b> - end ticket dice.<br />");
         },
 
 	joinnticketdice: 'jointd',
