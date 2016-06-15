@@ -154,10 +154,6 @@ Profile.prototype.title = function () {
 	return '';
 };
 
-Profile.prototype.nickname = function () {
-        return label ('Nickname') + let nickname = Db('nicknames').get(toId(toId(this.user)));
-        return '';
-};
 
 Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
@@ -166,7 +162,6 @@ Profile.prototype.show = function (callback) {
 		SPACE + this.name() + SPACE + this.title() + BR +
 		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
-                SPACE + this.nickname() + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
 };
