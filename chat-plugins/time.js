@@ -55,34 +55,6 @@ exports.commands = {
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
 
-	nolife: 'ontime',
-	userontime: 'ontime',
-	ontime: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-
-		const userid = target ? toId(target) : user.userid;
-		const currentOntime = Ontime[userid] ? Date.now() - Ontime[userid] : 0;
-		const totalOntime = Db('ontime').get(userid, 0) + currentOntime;
-
-		if (!totalOntime) return this.sendReplyBox(userid + " has never been online on this server.");
-
-		const isConnected = Users.get(userid) && Users.get(userid).connected;
-
-		// happens when a user opens 2 tabs and closes one of them, removing them from the Ontime object
-		if (isConnected && !Ontime[userid]) {
-			Ontime[userid] = Date.now();
-		}
-
-		if (isConnected) {
-			this.sendReplyBox(
-				userid + "'s total ontime is <b>" + displayTime(convertTime(totalOntime)) + "</b>." + " Current ontime: <b>" + displayTime(convertTime((currentOntime))) + "</b>"
-			);
-		} else {
-			this.sendReplyBox(userid + "'s total ontime is <b>" + displayTime(convertTime(totalOntime)) + "</b>.");
-		}
-	},
-	ontimehelp: ["/ontime - Shows how long in total the user has been on the server."],
-
 	nolifeladder: 'ontimeladder',
 	mostonline: 'ontimeladder',
 	ontimeladder: function (target, room, user) {
