@@ -28,7 +28,7 @@ function isOdd(n) {
 
 
 exports.commands = {
-	betting: function (target, room, user) {
+	bucksbet: function (target, room, user) {
 		let firstDice = diceOne();
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
@@ -38,7 +38,8 @@ exports.commands = {
 
 		if (amount < 2) return this.errorReply("You don't have enough bucks for the bet.");
 
-		if (!target) return this.parse('/help betting');
+		if (!target) return this.parse('/help bucksbet');
+		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of Panagram in the <button name = "send" value = "/join casino">Casino</button>');
 
 		switch (choice) {
 		case 'ODD':
@@ -72,5 +73,5 @@ exports.commands = {
 			this.errorReply("Not a valid bet.");
 		}
 	},
-	bethelp: ["/bet [type] - rolls two dices and adds the two to make a final number. Choose between odd, even or seven. If you guess correctly you win bucks (betting for seven and winning awards more bucks)."],
+        bucksbethelp: ["/bucksbet [type] - rolls two dices and adds the two to make a final number. Choose between odd, even or seven. If you guess correctly you win bucks (betting for seven and winning awards more bucks)."],
 };
