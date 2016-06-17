@@ -70,6 +70,7 @@ exports.commands = {
         start: 'spin',
         spin: function(target, room ,user) {
             if (room.id !== 'casino') return this.errorReply('Casino games can only be played in the "Casino".');
+            if (!this.canBroadcast()) return false;
             if (!this.canTalk()) return this.errorReply('/slots spin - Access Denied.');
             
             const amount = Db('money').get(user.userid, 0);
