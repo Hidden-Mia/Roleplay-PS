@@ -33,11 +33,8 @@ exports.commands = {
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
 		let house = rng();
-
 		let choice = target.toUpperCase();
-
 		let amount = Db('money').get(user.userid, 0);
-		if (room.id !== 'casino') return this.errorReply('betting games can only be used in Casino');
 
 		if (amount < 2) return this.errorReply("You don't have enough bucks for the bet.");
 
