@@ -138,10 +138,10 @@ class Ambush {
 	}
 	getWinner() {
 		let winner = this.getSurvivors()[0][0].name;
-		let msg = '|html|<div class = "infobox"><center>The winner of this game of ambush is <b>' + Tools.escapeHTML(winner) + '!</b> Congratulations!</center>';
-		{
-			this.room.add(msg).update();
-		}
+		room.addRaw('|html|<div class = "infobox"><center>The winner of this game of ambush is <b>' + Tools.escapeHTML(winner) + '!</b> Congratulations!</center>');
+		if (this.room.id === 'lobby') {
+			room.addRaw('<center>' + Tools.escapeHTML(winner) + ' has also won <b>5</b> bucks for winning!</center>');
+			Db('money').set(user.userid, winner + 2).get(user.userid);
 		this.end();
 	}
 	end(user) {
@@ -222,13 +222,14 @@ let commands = {
 };
 exports.commands = {
 	ambush: commands,
+	fire: 'shoot',
 	shoot: commands.fire,
 	ambushhelp: [
 		'/ambush start [seconds] - Starts a game of ambush in the room. The first round will begin after the mentioned number of seconds (1 minute by default). Requires + or higher to use.',
 		'/ambush join/leave - Joins/Leaves a game of ambush.',
 		'/ambush proceed - Forcibly starts the first round of the game. Requires + or higher to use',
 		'/ambush dq [user] - Disqualifies a player from a game of ambush. Requires % or higher to use',
-		'/ambush shoot [user] - Shoots another player (you can shoot yourself too)',
+		'/ambush shoot/fire [user] - Shoots another player (you can shoot yourself too)',
 		'/ambush end - Forcibly ends a game of ambush. Requires % or higher to use.',
 		'/ambush rules - Displays the rules of the game.',
 	],
