@@ -19,6 +19,9 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
+const path = require('path');
+const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
+const dir = fs.readdirSync(path.resolve(__dirname, 'chat-plugins'));
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
@@ -149,11 +152,11 @@ exports.commands = {
 		}
 		this.pmTarget = (targetUser || this.targetUsername);
 		if (!targetUser) {
-			this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
+			this.errorReply("User "  + this.targetUsername + " not found. Did you misspell their name? If they are offline, try using /tell to send them an offline message.");
 			return this.parse('/help msg');
 		}
 		if (!targetUser.connected) {
-			return this.errorReply("User " + this.targetUsername + " is offline.");
+			return this.errorReply("User " + this.targetUsername + " is offline. Try using /tell to send them an offline message.");
 		}
 
 		if (Config.pmmodchat) {
@@ -233,11 +236,21 @@ exports.commands = {
 			}
 		}
 
-		if (!message) message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		let emoteMsg = parseEmoticons(target, room, user, true);
+		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
+
+		message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+
 		user.send(message);
-		if (targetUser !== user) targetUser.send(message);
-		targetUser.lastPM = user.userid;
-		user.lastPM = targetUser.userid;
+		if (targetUser !== user) {
+ 			if (Users.ShadowBan.checkBanned(user)) {
+ 				Users.ShadowBan.addMessage(user, "Private to " + targetUser.getIdentity(), target);
+ 			} else {
+ 				targetUser.send(message);
+ 				targetUser.lastPM = user.userid;
+ 				user.lastPM = targetUser.userid;
+ 			}
+ 		}
 	},
 	msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
 
@@ -634,14 +647,10 @@ exports.commands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
+			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox(
-					'<code>/roomintro ' + Tools.escapeHTML(room.introMessage).split('\n').map(line => {
-						return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length));
-					}).join('<br />') + '</code>'
-				);
+				this.sendReplyBox('<code>/roomintro ' + Tools.escapeHTML(room.introMessage) + '</code>');
 			}
 			return;
 		}
@@ -655,12 +664,12 @@ exports.commands = {
 		}
 		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
 
-		room.introMessage = target.replace(/\r/g, '');
+		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
+		this.sendReply('|raw|<div class="infobox infobox-limited">' + target + '</div>');
 
 		this.privateModCommand("(" + user.name + " changed the roomintro.)");
-		this.logEntry(room.introMessage.replace(/\n/g, ''));
+		this.logEntry(target);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
@@ -687,14 +696,10 @@ exports.commands = {
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
 			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
-			this.sendReply('|raw|<div class="infobox">' + room.staffMessage.replace(/\n/g, '') + '</div>');
+			this.sendReply('|raw|<div class="infobox">' + room.staffMessage + '</div>');
 			if (user.can('ban', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox(
-					'<code>/staffintro ' + Tools.escapeHTML(room.staffMessage).split('\n').map(line => {
-						return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length));
-					}).join('<br />') + '</code>'
-				);
+				this.sendReplyBox('<code>/staffintro ' + Tools.escapeHTML(room.staffMessage) + '</code>');
 			}
 			return;
 		}
@@ -708,12 +713,12 @@ exports.commands = {
 		}
 		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
 
-		room.staffMessage = target.replace(/\r/g, '');
+		room.staffMessage = target;
 		this.sendReply("(The staff introduction has been changed to:)");
-		this.sendReply('|raw|<div class="infobox">' + target.replace(/\n/g, '') + '</div>');
+		this.sendReply('|raw|<div class="infobox">' + target + '</div>');
 
 		this.privateModCommand("(" + user.name + " changed the staffintro.)");
-		this.logEntry(room.staffMessage.replace(/\n/g, ''));
+		this.logEntry(target);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.staffMessage = room.staffMessage;
@@ -851,7 +856,10 @@ exports.commands = {
 			}
 		}
 		if (targetUser && targetUser.locked && !room.isPrivate && !room.battle && !room.isPersonal && (nextGroup === '%' || nextGroup === '@')) {
-			return this.errorReply("Locked users can't be promoted.");
+			Monitor.log("[CrisisMonitor] " + user.name + " was automatically demoted in " + room.id + " for trying to promote locked user: " + targetUser.name + ".");
+			room.auth[user.userid] = '@';
+			user.updateIdentity(room.id);
+			return this.errorReply("You have been automatically deauthed for trying to promote locked user: '" + name + "'.");
 		}
 
 		if (nextGroup === ' ') {
@@ -1220,7 +1228,6 @@ exports.commands = {
 			if (cmd === 'forcelock') {
 				let from = targetUser.deconfirm();
 				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
-				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
 				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
 			}
@@ -1251,7 +1258,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		Punishments.lock(targetUser, null, null, target);
+		Punishments.lock(targetUser);
 		return true;
 	},
 	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~"],
@@ -1279,7 +1286,6 @@ exports.commands = {
 			if (cmd === 'forcelock') {
 				let from = targetUser.deconfirm();
 				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
-				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
 				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
 			}
@@ -1310,7 +1316,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, target);
+		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000);
 		return true;
 	},
 	weeklockhelp: ["/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. Requires: % @ & ~"],
@@ -1362,7 +1368,6 @@ exports.commands = {
 			if (cmd === 'forceban') {
 				let from = targetUser.deconfirm();
 				Monitor.log("[CrisisMonitor] " + name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
-				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
 				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to ban them use /forceban.");
 			}
@@ -1398,7 +1403,7 @@ exports.commands = {
 
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-		Punishments.ban(targetUser, null, null, target);
+		Punishments.ban(targetUser);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
@@ -1822,7 +1827,7 @@ exports.commands = {
 		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
 		Rooms.global.cancelSearch(targetUser);
-		Punishments.namelock(targetUser, null, null, reason);
+		Punishments.namelock(targetUser);
 		targetUser.popup("|modal|" + user.name + " has locked your name and you can't change names anymore" + (reason ? ": " + reason : "."));
 		return true;
 	},
@@ -3051,8 +3056,3 @@ exports.commands = {
 	},
 
 };
-
-process.nextTick(() => {
-	CommandParser.multiLinePattern.register('>>>? ');
-	CommandParser.multiLinePattern.register('/(room|staff)(topic|intro) ');
-});
