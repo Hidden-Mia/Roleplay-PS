@@ -148,6 +148,12 @@ Profile.prototype.rstaff = function (user) {
 	
 };
 
+Profile.prototype.contributor = function (user) {
+	if (isCONTRIBUTOR(user)) return font('#6390F0', '(<b>Contributor</b>)');
+	return '';
+	
+};
+
 Profile.prototype.title = function () {
 	let title = Db('TitleDB').get(toId(toId(this.user)));
 	if (typeof title !== 'undefined' && title !== null)  return ' (<font color=#' + title[0] + '><b>' + Tools.escapeHTML(title[1]) + '</b></font>)';
@@ -160,7 +166,7 @@ Profile.prototype.show = function (callback) {
 
 	return this.buttonAvatar() +
 		SPACE + this.name() + SPACE + this.title() + BR +
-		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + BR +
+		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + SPACE + this.contributor(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
