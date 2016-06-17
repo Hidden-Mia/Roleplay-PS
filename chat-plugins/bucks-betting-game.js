@@ -40,7 +40,7 @@ exports.commands = {
 		if (amount < 2) return this.errorReply("You don't have enough bucks for the bet.");
 
 		if (!target) return this.parse('/help bucksbet');
-		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of Panagram in the <button name = "send" value = "/join casino">Casino</button>');
+		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of bucks bet in the <button name = "send" value = "/join casino">Casino</button>');
 
 		switch (choice) {
 		case 'ODD':
