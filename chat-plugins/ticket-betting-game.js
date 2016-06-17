@@ -38,6 +38,7 @@ exports.commands = {
 		if (amount < 20) return this.errorReply("You don't have enough tickets for the bet.");
 
 		if (!target) return this.parse('/help bucksbet');
+                if (!this.canBroadcast()) return false;
 		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of tickets bet in the <button name = "send" value = "/join casino">Casino</button>');
 
 		switch (choice) {
