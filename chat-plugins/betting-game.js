@@ -28,7 +28,7 @@ function isOdd(n) {
 
 
 exports.commands = {
-	bet: function (target, room, user) {
+	betting: function (target, room, user) {
 		let firstDice = diceOne();
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
@@ -37,11 +37,11 @@ exports.commands = {
 		let choice = target.toUpperCase();
 
 		let amount = Db('money').get(user.userid, 0);
-		if (room.id !== 'casino' && !~developers.indexOf(this.userid)) return this.errorReply('betting games can only be used in Casino');
+		if (room.id !== 'casino') return this.errorReply('betting games can only be used in Casino');
 
 		if (amount < 2) return this.errorReply("You don't have enough bucks for the bet.");
 
-		if (!target) return this.parse('/help bet');
+		if (!target) return this.parse('/help betting');
 
 		switch (choice) {
 		case 'ODD':
