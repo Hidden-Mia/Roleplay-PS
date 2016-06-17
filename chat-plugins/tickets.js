@@ -233,6 +233,7 @@ exports.commands = {
 
 	rewardcentre: 'rewardcentre',
 	rewardcentre: function (target, room, user) {
+                if (!this.canBroadcast()) return false;
 		return this.sendReply("|raw|" + rewardcentreDisplay);
 	},
 	rewardcentrehelp: ["/rewardcentre - Display items you can win with tickets."],
@@ -339,6 +340,7 @@ exports.commands = {
 		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a ticket dice for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/jointd'>Click to join.</button></center></h2></div>");
 	},
 	tdhelp: function(target, room, user) {
+               if (!this.canBroadcast()) return false; 
                 this.sendReplyBox("<center><b><u>Ticket Dice Commands</u></b><br /><b>/starttd [bet]</b> - Start a dice game to gamble for tickets.<br /> <b>/jointd</b> - join ticket dice.<br /><b>/endtd</b> - end ticket dice.<br />");
         },
 
