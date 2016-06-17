@@ -233,7 +233,6 @@ exports.commands = {
 
 	rewardcentre: 'rewardcentre',
 	rewardcentre: function (target, room, user) {
-		if (!this.canBroadcast()) return;
 		return this.sendReply("|raw|" + rewardcentreDisplay);
 	},
 	rewardcentrehelp: ["/rewardcentre - Display items you can win with tickets."],
