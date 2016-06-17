@@ -28,7 +28,8 @@ function isOdd(n) {
 
 
 exports.commands = {
-	bucksbet: function (target, room, user) {
+	bucksbet: 'buckbet',
+        buckbet: function (target, room, user) {
 		let firstDice = diceOne();
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
