@@ -268,6 +268,7 @@ exports.grouplist = [
 		id: "admin",
 		name: "Administrator",
 		root: true,
+                lockdown: true,
 		globalonly: true,
 	},
 	{
