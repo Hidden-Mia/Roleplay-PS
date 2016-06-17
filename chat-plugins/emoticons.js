@@ -153,7 +153,7 @@ function parseEmoticons(message, room, user, pm) {
 	// add emotes
 	message = message.replace(patternRegex, function (match) {
 		let emote = emotes[match];
-		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="50" width="50" />' : match;
+		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="48" width="38" />' : match;
 	});
 
 	// __italics__
@@ -191,7 +191,7 @@ function create_table() {
 
 	for (let i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
-			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='38' width='38' />" +
 			emotes_name[i] + "</td>");
 	}
 
@@ -234,7 +234,7 @@ exports.commands = {
 
 	emotes: 'emoticons',
 	emoticons: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.can('Broadcast') return;
 		this.sendReply("|raw|" + emotes_table);
 	},
 	emoticonshelp: ["/emoticons - Get a list of emoticons."],
@@ -255,7 +255,7 @@ exports.commands = {
 
 	rande: 'randemote',
 	randemote: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.can('Broadcast') return;
 		let rng = Math.floor(Math.random() * emotesKeys.length);
 		let randomEmote = emotesKeys[rng];
 		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
