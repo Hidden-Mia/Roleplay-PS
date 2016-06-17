@@ -16,7 +16,7 @@ function isMoney(money) {
 exports.commands = {
 	shell: {
 		hide: function (target, room, user) {
-			if (room.id !== 'casino') return this.errorReply('Shell Game can only be played in the Casino.');
+		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of shell in the <button name = "send" value = "/join casino">Casino</button>');
 			if (!this.canTalk()) return this.errorReply("You can not start Shell Games while unable to speak.");
 			if (!target || target.indexOf(',') < 0) return this.parse('/help shells');
 
@@ -48,7 +48,7 @@ exports.commands = {
 			}
 		},
 		guess: function (target, room, user) {
-			if (room.id !== 'casino') return this.errorReply('Shell Game can only be played in the Casino.');
+		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of shell in the <button name = "send" value = "/join casino">Casino</button>');
 			if (!this.canTalk()) return this.errorReply('You can not play Shell Games while unable to speak.');
 			if (!room.shellgame.active) return this.errorReply('There is no Shell Game currently active.');
 			if (room.shellgame.host === user.userid) return this.errorReply("You hid the ball.");
@@ -73,7 +73,7 @@ exports.commands = {
 			}
 		},
 		end: function (target, room, user) {
-			if (room.id !== 'casino') return this.errorReply('shell Game can only be played in the Casino.');
+				if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of shell in the <button name = "send" value = "/join casino">Casino</button>');
 			if (room.shellgame.host !== user.userid && !this.can('ban', null, room)) return this.errorReply('You cannot end this shell Game.');
 			if ((Date.now() - room.shellgame.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a Shell game within the first minute of it starting.");
 			delete room.shellgame;
