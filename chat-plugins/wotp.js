@@ -1,28 +1,29 @@
 'use strict';
+
  /********************
   * Who's that Pokemon?
  ********************/
- const cards = require('../config/card-data.js');
- const maxMistakes = 6;
+const cards = require('../config/card-data.js');
+const maxMistakes = 6;
  
- class Wtp {
- 	constructor(room, user, mon, hint1, hint2, hint3) {
- 		this.room = room;
- 		this.creator = user.userid;
+class Wtp {
+ constructor(room, user, mon, hint1, hint2, hint3) {
+ 	this.room = room;
+ 	this.creator = user.userid;
 		this.mon = mon;
- 		this.hint1 = Tools.escapeHTML(hint1);
- 		this.hint2 = Tools.escapeHTML(hint2);
- 		this.hint3 = Tools.escapeHTML(hint3);
- 		this.guesses = [];
+ 	this.hint1 = Tools.escapeHTML(hint1);
+ 	this.hint2 = Tools.escapeHTML(hint2);
+ 	this.hint3 = Tools.escapeHTML(hint3);
+ 	this.guesses = [];
  	}
  
- 	initDisplay() {
+ initDisplay() {
  		this.room.addRaw('<div class="sentence-container"><font size="4">Who\'s That Pokemon has been started by ' + this.creator + '<br />Hints: <font color="red">' + this.hint1 + ' - ' + this.hint2 + ' - ' + this.hint3 + '</font></font></div>');
  	}
  
- 	guess(guess, user) {
+guess(guess, user) {
  		let guessed = toId(guess);
- 		if (user.userid === this.creator) return user.sendTo(this.room, "You can't guess in your own wtp game.");
+ 	if (user.userid === this.creator) return user.sendTo(this.room, "You can't guess in your own wtp game.");
 		if (guessed.length > 30 || guessed.length < 1) return user.sendTo(this.room, "You\'re guess is invalid.");
  		for (let i = 0; i < this.guesses.length; i++) {
  			if (guessed === toId(this.guesses[i])) return user.sendTo(this.room, "Your guess has already been tried.");
@@ -37,22 +38,22 @@
  		}
  	}
  
- 	endDisplay(display) {
+ endDisplay(display) {
  		this.room.addRaw(display);
  	}
  
- 	endGame() {
+ endGame() {
  		delete this.room.wtp;
  	}
  }
  
-  function checkMon(mon) {
+function checkMon(mon) {
  	let cardName = toId(mon);
  	if (!cards.hasOwnProperty(cardName)) return false;
  	return true;
  }
  
-  function showCard(card, winner) {
+function showCard(card, winner) {
  	let image = cards[toId(card)];
  	let display = '<div class="card-div card-td" style="box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);"><img src="' + image.card + '" height="220" title="' + image.name + '" align="right">' +
  		'<span class="card-name" style="border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9);  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8) inset, 0px 0px 2px rgba(0, 0, 0, 0.2);">' + image.title + '</span>' +
@@ -62,11 +63,10 @@
  	return display;
  }
 
-}
  
- exports.commands = {
+exports.commands = {
  	wtp: 'whosthatpokemon',
- 	whosthatpokemon: function (target, room, user) {
+ 	whosthatpokemon: function(target, room, user) {
  		if (!this.can('ban', null, room)) return false;
 		let params = target.split(',');
  		if (params.length < 3) return this.errorReply("Must have one mon and a 3 hints");
@@ -84,7 +84,7 @@
  		room.wtp.initDisplay();
  	},
  
- 	guessmon: function (target, room, user) {
+ 	guessmon: function(target, room, user) {
  		if (!target) return this.parse('/help guess');
  		if (!room.wtp) return this.errorReply("There is no game of wtp in progress.");
  		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -92,10 +92,10 @@
  		room.wtp.guess(guessedmon, user);
  	},
  
- 	wtpend: function (target, room, user) {
+ 	wtpend: function(target, room, user) {
  		if (!this.can('ban', null, room)) return false;
 		if (!room.wtp) return this.errorReply("There is no game of wtp in progress.");
- 		room.addRaw('<h4>The game of Who\'s that Pokemon was ended early. The pokemon was <font color="red">' + room.wtp.mon  '.</font></h4>');
+ 		room.addRaw('<h4>The game of Who\'s that Pokemon was ended early. The pokemon was <font color="red">' + room.wtp.mon + '.</font></h4>');
  		room.wtp.endGame();
  	},
  };
