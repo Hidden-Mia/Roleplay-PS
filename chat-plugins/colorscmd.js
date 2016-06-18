@@ -16,4 +16,15 @@ exports.commands = {
          staffcolorhelp: function(target, room, user) {
              this.sendReply('/staffcolor [COLOR],[FONT],[TEXT] - Post colored message.');
          },
+
+         color: function(target, room, user) {
+            if (!this.can('eval') && isVip(user)) return this.sendReply('You most be leader or admin to use this command!');
+            target = target.split(',');
+            if (!target[0]) return this.parse('/colorhelp');
+            if (!target[1]) return this.parse('/colorhelp');
+            this.sendReply('|raw|' + user.group + '<b><font color="' + color(toId(this.user.name)) + '">' + user.name + ':&nbsp;</font></b><font color="' + target[0] + '' + Tools.escapeHTML(target[1]) + '</font>');
+         },
+         colorelp: function(target, room, user) {
+             this.sendReply('/color [COLOR],[TEXT] - Valid command!.');
+         },
 };
