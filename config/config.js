@@ -1,8 +1,8 @@
 'use strict';
 
 // The server port - the port to run Pokemon Showdown under
-exports.port = process.env.PORT;
-exports.port = process.env.PORT;
+exports.port = process.env.PORT || 80;
+exports.port = process.env.PORT || 80;
 
 
 // Server id and token
