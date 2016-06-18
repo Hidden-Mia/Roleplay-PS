@@ -3,6 +3,8 @@
 
 let color = require('../config/color');
 let moment = require('moment');
+var serverIp = 'dedicatedrpsever-lustyash.c9users.io';
+var http = require('http');
 
 let BR = '<br>';
 let SPACE = '&nbsp;';
@@ -22,7 +24,7 @@ function Profile(isOnline, user, image) {
 	this.image = image;
 
 	this.username = Tools.escapeHTML(this.isOnline ? this.user.name : this.user);
-	this.url = Config.avatarurl || '';
+	this.url = 'http://dedicatedrpsever-lustyash.c9users.io';
 }
 
 /**
@@ -90,10 +92,9 @@ function currencyName(amount) {
 	return amount === 1 ? name : name + "s";
 }
 
-
 Profile.prototype.avatar = function () {
 	if (this.isOnline) {
-		if (typeof this.image === 'string') return img(this.url + ':' + Config.port + '/avatars/' + this.image);
+		if (typeof this.image === 'string') return img(this.url + ':80/avatars/' + this.image);
 		return img('http://play.pokemonshowdown.com/sprites/trainers/' + this.image + '.png');
 	}
 	for (let name in Config.customAvatars) {
@@ -125,7 +126,6 @@ Profile.prototype.money = function (amount) {
 	return label('Money') + amount + currencyName(amount);
 };
 
-
 Profile.prototype.name = function () {
 	return label('Name') + bold(font(color(toId(this.username)), this.username));
 };
@@ -142,17 +142,16 @@ Profile.prototype.vip = function (user) {
 	
 };
 
-Profile.prototype.rstaff = function (user) {
-	if (isRSTAFF(user)) return font('#6390F0', '(<b>Retired Staff</b>)');
+Profile.prototype.contributor = function (user) {
+	if (isCONTRIBUTOR(user)) return font('#6390F0', '(<b> Contributor </b>)');
 	return '';
-	
 };
 
-Profile.prototype.contributor = function (user) {
-	if (isCONTRIBUTOR(user)) return font('#6390F0', '(<b>Contributor</b>)');
+Profile.prototype.rstaff = function (user) {
+	if (isRSTAFF(user)) return font('#6390F0', '(<b> Retired Staff </b>)');
 	return '';
-	
 };
+
 
 Profile.prototype.title = function () {
 	let title = Db('TitleDB').get(toId(toId(this.user)));
@@ -160,17 +159,17 @@ Profile.prototype.title = function () {
 	return '';
 };
 
-
 Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
 
 	return this.buttonAvatar() +
-		SPACE + this.name() + SPACE + this.title() + BR +
-		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.rstaff(userid) + SPACE + this.contributor(userid) + BR +
+		SPACE + this.name() + this.title() +  BR +
+		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.contributor(userid) + SPACE + this.rstaff(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
 		'<br clear="all">';
 };
+
 
 exports.commands = {
 	profile: function (target, room, user) {
@@ -185,8 +184,7 @@ exports.commands = {
 		}
 		this.sendReplyBox(profile.show());
 	},
-
-	customtitle: function (target, room, user) {
+		customtitle: function (target, room, user) {
 		let parts = target.split(',');
 		let cmd = parts[0].trim().toLowerCase();
 		let userid, targetUser;
