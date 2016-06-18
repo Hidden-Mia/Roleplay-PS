@@ -4,6 +4,11 @@
 exports.port = process.env.PORT;
 exports.port = process.env.PORT;
 
+
+// Server id and token
+exports.serverid = 'roleplay';
+exports.servertoken = '8HUW//4ueo7s';
+
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
@@ -379,6 +384,7 @@ exports.grouplist = [
         modlog: true,
         kick: true,
         lock: true,
+        roomonly: true,
         alts: '%u',
 		bypassblocks: 'u%@&~',
         },
