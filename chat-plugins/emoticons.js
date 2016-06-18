@@ -153,7 +153,7 @@ function parseEmoticons(message, room, user, pm) {
 	// add emotes
 	message = message.replace(patternRegex, function (match) {
 		let emote = emotes[match];
-		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="48" width="38" />' : match;
+		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="40" width="40" />' : match;
 	});
 
 	// __italics__
@@ -191,7 +191,7 @@ function create_table() {
 
 	for (let i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
-			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='38' width='38' />" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='40' width='40' />" +
 			emotes_name[i] + "</td>");
 	}
 
@@ -258,7 +258,7 @@ exports.commands = {
                 if (!this.canBroadcast()) return false;
 		let rng = Math.floor(Math.random() * emotesKeys.length);
 		let randomEmote = emotesKeys[rng];
-		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
+		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='40' width='40' />");
 	},
 	randemotehelp: ["/randemote - Get a random emote."]
 };
