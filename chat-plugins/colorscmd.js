@@ -1,6 +1,6 @@
 'use strict';
 
-/* Color Commands By Prince Sky */
+/* Color Commands By Prince Sky (with bugs XD) Fixed by Mia Flores */
 
 let color = require('../config/color');
 
