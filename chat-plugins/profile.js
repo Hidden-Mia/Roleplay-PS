@@ -3,6 +3,7 @@
 
 let color = require('../config/color');
 let moment = require('moment');
+let geoip = require('geoip-ultralight');
 var serverIp = 'dedicatedrpsever-lustyash.c9users.io';
 var http = require('http');
 
@@ -152,6 +153,16 @@ Profile.prototype.rstaff = function (user) {
 	return '';
 };
 
+Profile.prototype.flag = function (user) {
+	if (Users(user)) {
+		let userFlag = geoip.lookupCountry(Users(user).latestIp);
+		if (userFlag) {
+			return '<img src="https://github.com/kevogod/cachechu/blob/master/flags/' + userFlag.toLowerCase() + '.png?raw=true" height=10 title="' + userFlag + '">';
+		}
+	}
+	return '';
+};
+
 
 Profile.prototype.title = function () {
 	let title = Db('TitleDB').get(toId(toId(this.user)));
@@ -163,7 +174,7 @@ Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
 
 	return this.buttonAvatar() +
-		SPACE + this.name() + this.title() +  BR +
+		SPACE + this.name() + this.title() + SPACE + this.flag(userid) +  BR +
 		SPACE + this.group() + SPACE + this.vip(userid) + SPACE + this.contributor(userid) + SPACE + this.rstaff(userid) + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
