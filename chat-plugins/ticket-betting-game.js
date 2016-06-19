@@ -28,6 +28,7 @@ function isOdd(n) {
 exports.commands = {
 	ticketsbet: 'ticketbet',
         ticketbet: function (target, room, user) {
+                if (!this.runBroadcast()) return;
 		let firstDice = diceOne();
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
