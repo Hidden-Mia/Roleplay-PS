@@ -46,8 +46,8 @@ exports.commands = {
 			fs.writeFile('static/logs/' + filename, data, err => {
 				if (err) return this.errorReply("/viewlogs - " + err);
 				this.sendReply(
-					"|raw|You can view the logs at <a href=\"http://goldservers.info:" + Config.port +
-					"/logs/logviewer.html?file=" + filename + "\">http://goldservers.info:" + Config.port +
+					"|raw|You can view the logs at <a href=\"http://dedicatedrpsever-lustyash.c9users.io:" + Config.port +
+					"/logs/logviewer.html?file=" + filename + "\">http://dedicatedrpsever-lustyash.c9users.io:" + Config.port +
 					"/logs/logviewer.html?file=" + filename + "</a>"
 				);
 				setTimeout(function () {
