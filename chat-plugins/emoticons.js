@@ -129,7 +129,7 @@ function create_table() {
 	let len = emotes_name.length;
 
 	for (let i = 0; i < len; i++) {
-		emotes_list.push("<td style='padding: 5px; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5) inset; border-radius: 5px;'>" + "<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' style='vertical-align: middle;  padding-right: 5px;' />" + emotes_name[i] + "</td>");
+		emotes_list.push("<td style='padding: 5px; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5) inset; border-radius: 5px;'>" + "<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='40' width='40' style='vertical-align: middle;  padding-right: 5px;' />" + emotes_name[i] + "</td>");
 	}
 
 	for (let i = 0; i < len; i += 4) {
