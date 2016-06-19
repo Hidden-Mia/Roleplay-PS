@@ -30,6 +30,7 @@ function isOdd(n) {
 exports.commands = {
 	bucksbet: 'buckbet',
         buckbet: function (target, room, user) {
+                if (!this.runBroadcast()) return;
 		let firstDice = diceOne();
 		let secondDice = diceTwo();
 		let totalDice = firstDice + secondDice;
