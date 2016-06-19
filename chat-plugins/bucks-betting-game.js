@@ -37,11 +37,8 @@ exports.commands = {
 		let house = rng();
 		let choice = target.toUpperCase();
 		let amount = Db('money').get(user.userid, 0);
-
 		if (amount < 2) return this.errorReply("You don't have enough bucks for the bet.");
-
 		if (!target) return this.parse('/help bucksbet');
-                if (!this.runBroadcast()) return;
 		if (room.id !== 'casino') return this.sendReply('|html|You can only start a game of bucks bet in the <button name = "send" value = "/join casino">Casino</button>');
 
 		switch (choice) {
