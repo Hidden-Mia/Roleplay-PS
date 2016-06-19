@@ -55,42 +55,6 @@ exports.commands = {
 		}
 		this.sendReplyBox(header + official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' ') + (groupChats.length > 1 ? groupChats.join(' ') : '') + (battleRooms.length > 1 ? battleRooms.join(' ') : ''));
     },
-    cgdeclare: 'customgdeclare',
-	customgdeclare: function (target, room, user) {
-		let parts = target.split(',');
-		if (!target) return this.parse('/help customgdeclare');
-		if (!parts[4]) return this.parse('/help customgdeclare');
-		if (!this.can('gdeclare')) return false;
-
-		for (let id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue" style="border-radius: 5px;"><b>We are hosting a <font color="#57194A"><b>' + parts[0] + '</b></font> in <button name="send" value="/join ' + parts[1] + '" style="border-radius: 3px; margin: 3px; padding: 2px 5px; font-weight: bold; font-style: italic; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.35); color: #57194A; text-shadow: none;">' + parts[1] + '</button> !<br />The tier is <font style="color: #57194A; font-weight: bold;"><b>' + parts[2] + '</b></font>! Join up and have fun!<br /><br />The prize for the winner is <font style="color: #57194A; font-weight: bold;"><b>' + parts[3] + '</b></font> bucks, while the runner-up will get <font style="color: #57194A; font-weight: bold;"><b>' + parts[4] + '</b></font> bucks!<br /><small><i>~' + user.name + '</i></small></b></div>');
-		}
-		this.logModCommand(user.name + " globally custom declared " + target);
-	},
-	customgdeclarehelp: ["/customgdeclare [event name], [room], [tier], [buck reward], [runner-up buck reward] - Preset gdeclare which anonymously announces a message to every room on the server. Requires: &, ~"],
-
-mt: 'mktour',
-	mktour: function(target, room, user) {
-		if (!target) return this.errorReply("Usage: /mktour [tier] - creates a tournament in single elimination.");
-		target = toId(target);
-		let t = target;
-		if (t === 'rb') t = 'randombattle';
-		if (t === 'cc1v1' || t === 'cc1vs1') t = 'challengecup1v1';
-		if (t === 'randmono' || t === 'randommonotype') t = 'monotyperandombattle';
-		if (t === 'mono') t === 'monotype';
-		if (t === 'ag') t === 'anythinggoes';
-		if (t === 'ts') t === 'tiershift';
-		this.parse('/tour create ' + t + ', elimination');
-	},
-	rb: 'redbattle',
-		redbattle: function(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox('<center><b><u>Red Battle Pokemon List</u></b><br /> <img src="http://i.imgur.com/umrMb0U.png" height="100%" width="100%"><br /><b>Red Banlist: Yveltal, Red Orb, Heat Rock, Blazikenite.</b><br /><b>Red Battle Format By: Prince Sky & Invincible Swampert');
-	},
-	skytest: function (target, room, user) {
-		if (user.id !== 'princesky') return false;
-		let colour = blue	('<center><strong><font color="' + colour + '">~~ ' + Tools.escapeHTML(message) + ' ~~</font></strong></center>');
-	},
 
 	spop: 'sendpopup',
 	sendpopup: function(target, room, user) {
@@ -132,7 +96,7 @@ mt: 'mktour',
 		if (!target) return this.sendReply('/lick needs a target.');
 		return this.parse('/me licks ' + target + ' excessively!');
 	},
-		cmds: 'serverhelp',
+		/* cmds: 'serverhelp',
 	flameshelp: 'serverhelp',
 	serverhelp: function (target, room, user, connection) {
 		if (!this.canBroadcast()) return;
@@ -177,6 +141,6 @@ mt: 'mktour',
 				"<br />Use /cmds <i>number (1-3)</i> to see more commands."
 			);
 		}
-	},
+	}, */
 	
 };
