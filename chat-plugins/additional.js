@@ -74,6 +74,13 @@ exports.commands = {
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
 	},
 
+repo: 'roleplayrepo',
+roleplayrepo: 'gitrepo',
+gitrepo: function (target, room, user) {
+if (this.runBroadcast()) return;
+this.sendReply("http://github.com/Hidden-Mia/Roleplay-PS");
+},
+
 	pic: 'image',
 	image: function(target, room, user) {
 		if (!target) return this.sendReply('/image [url] - Shows an image using /a. Requires ~.');
